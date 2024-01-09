@@ -16,75 +16,95 @@ class _UserCardState extends State<UserCard> {
   Widget build(BuildContext context) {
     final username = widget.username;
     return Container(
-      margin: const EdgeInsets.only(top: 10),
-      padding: const EdgeInsets.symmetric(vertical: 10),
       color: Colors.white,
 
-      // Row for pfp, Name latest message, time
-      child: Row(
+      // user card with divider
+      child: Column(
         children: [
-          // user profile pic
-          CircleAvatar(
-            radius: 25,
-            backgroundImage: NetworkImage(
-                'https://voluget.com/assets/images/rateing-profile.png'),
-          ),
-
-          // sizedbox
-          const SizedBox(width: 15),
-
-          // name and latest message
-          Column(
+          // user card row
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                username,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 10,
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                'Latest Message',
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontSize: 10,
-                ),
-              ),
-            ],
-          ),
+              // row for pfp, name, message
+              Row(
+                children: [
+                  // user profile pic
+                  CircleAvatar(
+                    radius: 32,
+                    backgroundImage: NetworkImage(
+                        'https://voluget.com/assets/images/rateing-profile.png'),
+                  ),
 
-          const SizedBox(width: 50),
+                  // sizedbox
+                  const SizedBox(width: 15),
 
-          // timestamp and status
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '16:35',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 10,
-                ),
+                  // name and latest message
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        username,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Latest Message',
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              CircleAvatar(
-                  radius: 7,
-                  backgroundColor: Color.fromRGBO(0, 193, 167, 1),
-                  child: Text(
-                    '2',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
+
+              // timestamp and status
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 5, 25, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // timestamp
+                    Text(
+                      '16:35',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 11,
+                      ),
                     ),
-                  )),
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    // unread message count
+                    CircleAvatar(
+                        radius: 10,
+                        backgroundColor: Color.fromRGBO(0, 193, 167, 1),
+                        child: Text(
+                          '2',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600),
+                        )),
+                  ],
+                ),
+              ),
             ],
           ),
+
+          // Divider
+          const Divider(
+            indent: 70,
+            height: 20,
+          )
         ],
       ),
     );

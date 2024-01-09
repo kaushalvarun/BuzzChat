@@ -22,13 +22,15 @@ class HomePage extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Container(
-          margin: const EdgeInsets.only(left: 20),
-          child: const Text(
-            "Chats",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: const Text(
+              "Chats",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
             ),
           ),
         ),
@@ -42,24 +44,28 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Container(
-        margin: const EdgeInsets.only(left: 28),
         color: Colors.white,
         height: double.infinity,
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome user
-            Container(
-              margin: const EdgeInsets.only(left: 10),
-              child: Text(
-                "Welcome " + user.email! + "!",
-                style: const TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-            ),
+            // // Welcome user
+            // Container(
+            //   margin: const EdgeInsets.only(left: 10),
+            //   child: Text(
+            //     "Welcome " + user.email! + "!",
+            //     style: const TextStyle(
+            //       fontSize: 15,
+            //       fontWeight: FontWeight.w500,
+            //     ),
+            //   ),
+            // ),
 
+            const Divider(
+              indent: 75,
+              height: 20,
+            ),
             // search
 
             // stories
