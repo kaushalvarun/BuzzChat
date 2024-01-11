@@ -1,7 +1,7 @@
 import 'package:buzzchatv2/pages/login_or_register_page.dart';
+import 'package:buzzchatv2/pages/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'home_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -14,13 +14,17 @@ class AuthPage extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
+          // if firebase waiting show splash screen
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SplashScreen();
+          }
           // user logged in
           if (snapshot.hasData) {
             return HomePage();
           }
           // user not logged in
           else {
-            return LoginOrRegister();
+            return const LoginOrRegister();
           }
         },
       ),

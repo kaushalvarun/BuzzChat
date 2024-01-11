@@ -1,13 +1,12 @@
 import 'package:buzzchatv2/components/my_button.dart';
 import 'package:buzzchatv2/components/square_tile.dart';
-// import 'package:buzzchatv2/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../components/my_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   final Function() onTap;
-  LoginPage({super.key, required this.onTap});
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -16,7 +15,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   // terxt editing controllers
   final usernameController = TextEditingController();
-
   final passwordController = TextEditingController();
 
   // sign user in method
@@ -74,9 +72,10 @@ class _LoginPageState extends State<LoginPage> {
                     height: 25,
                   ),
                   // logo
-                  const Icon(
-                    Icons.question_answer,
-                    size: 100,
+                  Image.asset(
+                    'lib/images/buzzchatLogo.jpeg',
+                    height: 175,
+                    width: 175,
                   ),
 
                   const SizedBox(

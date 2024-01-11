@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class UserCard extends StatefulWidget {
-  final username;
-  UserCard({
+  final String username;
+  const UserCard({
     super.key,
     required this.username,
   });
@@ -30,7 +30,7 @@ class _UserCardState extends State<UserCard> {
               Row(
                 children: [
                   // user profile pic
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 32,
                     backgroundImage: NetworkImage(
                         'https://voluget.com/assets/images/rateing-profile.png'),
@@ -66,20 +66,20 @@ class _UserCardState extends State<UserCard> {
               ),
 
               // timestamp and status
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 25, 0),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(0, 5, 25, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // timestamp
                     Text(
                       '16:35',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 11,
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 10,
                     ),
 
@@ -89,7 +89,7 @@ class _UserCardState extends State<UserCard> {
                         backgroundColor: Color.fromRGBO(0, 193, 167, 1),
                         child: Text(
                           '2',
-                          style: const TextStyle(
+                          style: TextStyle(
                               color: Colors.white,
                               fontSize: 10,
                               fontWeight: FontWeight.w600),

@@ -21,16 +21,14 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Container(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: const Text(
-              "Chats",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
+        title: const Padding(
+          padding: EdgeInsets.only(bottom: 8.0),
+          child: Text(
+            "Chats",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
             ),
           ),
         ),

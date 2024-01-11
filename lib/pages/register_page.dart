@@ -1,6 +1,5 @@
 import 'package:buzzchatv2/components/my_button.dart';
 import 'package:buzzchatv2/components/square_tile.dart';
-// import 'package:buzzchatv2/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../components/my_text_field.dart';
@@ -73,13 +72,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 25,
                   ),
                   // logo
-                  const Icon(
-                    Icons.question_answer,
-                    size: 100,
+                  Image.asset(
+                    'lib/images/buzzchatLogo.jpeg',
+                    height: 175,
+                    width: 175,
                   ),
 
                   const SizedBox(
-                    height: 25,
+                    height: 20,
                   ),
 
                   // welcome
@@ -92,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   const SizedBox(
-                    height: 25,
+                    height: 15,
                   ),
 
                   // username
@@ -116,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                   ),
 
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 15),
 
                   // sign up button
                   MyButton(
@@ -124,7 +124,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     msg: 'Sign Up',
                   ),
 
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 20),
+
+                  // already a member, sign in
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Already a member?',
+                          style: TextStyle(color: Colors.grey[700])),
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text('Login here',
+                            style: TextStyle(
+                                color: Colors.blue[700],
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
                   // or continue with
                   Row(
                     children: [
@@ -150,8 +170,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
 
-                  const SizedBox(height: 30),
-
                   // Sign in with Google and Apple
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     SquareTile(
@@ -165,23 +183,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ]),
                   const SizedBox(height: 30),
-
-                  // not a member? register now
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Already a member?',
-                          style: TextStyle(color: Colors.grey[700])),
-                      const SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: widget.onTap,
-                        child: Text('Login here',
-                            style: TextStyle(
-                                color: Colors.blue[700],
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
