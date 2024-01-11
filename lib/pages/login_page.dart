@@ -1,21 +1,25 @@
 import 'package:buzzchatv2/components/my_button.dart';
+import 'package:buzzchatv2/components/my_text_field.dart';
 import 'package:buzzchatv2/components/square_tile.dart';
+import 'package:buzzchatv2/util/error_msg_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../components/my_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   final Function() onTap;
-  const LoginPage({super.key, required this.onTap});
+  const LoginPage({
+    super.key,
+    required this.onTap,
+  });
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // terxt editing controllers
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  // text editing controllers
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   // sign user in method
   void signUserIn() async {
@@ -29,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: usernameController.text,
-        password: passwordController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
       );
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -45,18 +49,6 @@ class _LoginPageState extends State<LoginPage> {
         showErrorMessage(context, 'Wrong Password');
       }
     }
-  }
-
-  void showErrorMessage(BuildContext context, String errorMsg) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.amber[200],
-          title: Text(errorMsg),
-        );
-      },
-    );
   }
 
   @override
@@ -88,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
 
@@ -97,14 +90,14 @@ class _LoginPageState extends State<LoginPage> {
 
                   // username
                   MyTextField(
-                    controller: usernameController,
-                    hintText: 'Enter username',
+                    controller: _emailController,
+                    hintText: 'Enter email',
                     obscureText: false,
                   ),
 
                   // password
                   MyTextField(
-                    controller: passwordController,
+                    controller: _passwordController,
                     hintText: 'Enter password',
                     obscureText: true,
                   ),
@@ -169,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                       imagePath: 'lib/images/google.png',
                       onTap: () => {}, //AuthService().signInWithGoogle(),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     SquareTile(
                         imagePath: 'lib/images/apple.png',
                         onTap: () => {} //AuthService().signInWithGoogle(),

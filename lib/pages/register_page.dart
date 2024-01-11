@@ -1,12 +1,17 @@
 import 'package:buzzchatv2/components/my_button.dart';
+import 'package:buzzchatv2/components/my_text_field.dart';
 import 'package:buzzchatv2/components/square_tile.dart';
+import 'package:buzzchatv2/util/error_msg_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../components/my_text_field.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function() onTap;
-  RegisterPage({super.key, required this.onTap});
+  const RegisterPage({
+    super.key,
+    required this.onTap,
+  });
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -14,10 +19,10 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   // text editing controllers
-  final usernameController = TextEditingController();
-
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   // sign user up method
   void signUserUp() async {
@@ -25,18 +30,29 @@ class _RegisterPageState extends State<RegisterPage> {
     showDialog(
       context: context,
       builder: (context) {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       },
     );
 
-    // create user email and password
+    // create user with email and password
     try {
-      if (passwordController.text == confirmPasswordController.text) {
+      if (_passwordController.text == _confirmPasswordController.text) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: usernameController.text,
-          password: passwordController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
         );
         Navigator.pop(context);
+
+        // grab newly created user info
+        final user = FirebaseAuth.instance.currentUser!;
+        print(user.uid);
+        // add additional user data like username and store in firestore db
+        // add or update this users chat data in db
+
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'username': _usernameController.text,
+          'email': _emailController.text,
+        });
       } else {
         Navigator.pop(context);
         showErrorMessage(context, 'Passwords don\'t match');
@@ -45,18 +61,6 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pop(context);
       showErrorMessage(context, e.code);
     }
-  }
-
-  void showErrorMessage(BuildContext context, String errorMsg) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.amber[200],
-          title: Text(errorMsg),
-        );
-      },
-    );
   }
 
   @override
@@ -71,6 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 25,
                   ),
+
                   // logo
                   Image.asset(
                     'lib/images/buzzchatLogo.jpeg',
@@ -88,6 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
 
@@ -95,23 +101,30 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 15,
                   ),
 
-                  // username
+                  // email field
                   MyTextField(
-                    controller: usernameController,
+                    controller: _emailController,
+                    hintText: 'Enter email',
+                    obscureText: false,
+                  ),
+
+                  // username field
+                  MyTextField(
+                    controller: _usernameController,
                     hintText: 'Enter username',
                     obscureText: false,
                   ),
 
-                  // password
+                  // password field
                   MyTextField(
-                    controller: passwordController,
+                    controller: _passwordController,
                     hintText: 'Enter password',
                     obscureText: true,
                   ),
 
-                  // confirm password
+                  // confirm password field
                   MyTextField(
-                    controller: confirmPasswordController,
+                    controller: _confirmPasswordController,
                     hintText: 'Re-enter password',
                     obscureText: true,
                   ),
