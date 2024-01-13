@@ -32,14 +32,13 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     try {
+      Navigator.pop(context);
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      // print(e.code);
       // WRONG username
       if (e.code == "invalid-email") {
         showErrorMessage(context, 'Wrong Username');
@@ -154,8 +153,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
 
-                  // const SizedBox(height: 10),
-
                   // Sign in with Google and Apple
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     SquareTile(
@@ -168,7 +165,6 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () => {} //AuthService().signInWithGoogle(),
                         ),
                   ]),
-                  // const SizedBox(height: 10),
 
                   // not a member? register now
                   Row(

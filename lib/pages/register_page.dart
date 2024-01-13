@@ -37,15 +37,15 @@ class _RegisterPageState extends State<RegisterPage> {
     // create user with email and password
     try {
       if (_passwordController.text == _confirmPasswordController.text) {
+        Navigator.pop(context);
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
-        Navigator.pop(context);
 
         // grab newly created user info
+        // ! signifies that user will not be null and will always exist
         final user = FirebaseAuth.instance.currentUser!;
-        print(user.uid);
         // add additional user data like username and store in firestore db
         // add or update this users chat data in db
 
@@ -58,7 +58,6 @@ class _RegisterPageState extends State<RegisterPage> {
         showErrorMessage(context, 'Passwords don\'t match');
       }
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
       showErrorMessage(context, e.code);
     }
   }

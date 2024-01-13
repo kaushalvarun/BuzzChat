@@ -1,3 +1,4 @@
+import 'package:buzzchatv2/util/sign_out.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +11,6 @@ class HomePage extends StatelessWidget {
 
   // stores list of all users
   final usersList = ["User 1", "User 2", "User 3"];
-
-  void signout() {
-    FirebaseAuth.instance.signOut();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +30,10 @@ class HomePage extends StatelessWidget {
           ),
         ),
         centerTitle: false,
-        actions: [
+        actions: const [
           IconButton(
             onPressed: signout,
-            icon: const Icon(Icons.logout),
+            icon: Icon(Icons.logout),
             iconSize: 25,
           ),
         ],

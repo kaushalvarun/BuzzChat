@@ -1,8 +1,8 @@
+import 'package:buzzchatv2/pages/chat_screen.dart';
 import 'package:buzzchatv2/pages/login_or_register_page.dart';
 import 'package:buzzchatv2/pages/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -20,7 +20,7 @@ class AuthPage extends StatelessWidget {
           }
           // user logged in
           if (snapshot.hasData) {
-            return HomePage();
+            return const ChatScreen();
           }
           // user not logged in
           else {
