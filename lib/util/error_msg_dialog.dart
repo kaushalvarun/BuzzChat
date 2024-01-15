@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
-void showErrorMessage(BuildContext context, String errorMsg) {
-  showDialog(
+void showErrorMessage(BuildContext context, String errorMsg) async {
+  await showDialog(
     context: context,
-    builder: (context) {
-      return AlertDialog(
-        backgroundColor: Colors.amber[200],
-        title: Text(errorMsg),
-      );
-    },
+    builder: (context) => AlertDialog(
+      backgroundColor: Colors.amber[200],
+      title: Text(errorMsg),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Center(child: const Text('OK')),
+        ),
+      ],
+    ),
   );
 }

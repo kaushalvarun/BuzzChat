@@ -38,11 +38,12 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
       // WRONG username
       if (e.code == "invalid-email") {
+        // ignore: use_build_context_synchronously
         showErrorMessage(context, 'Wrong Username');
       }
+
       // WRONG password
       else if (e.code == "INVALID_LOGIN_CREDENTIALS") {
         showErrorMessage(context, 'Wrong Password');
