@@ -4,23 +4,30 @@ import 'package:buzzchatv2/util/sign_out.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+  final Map<String, dynamic>? userMap;
+  final String chatRoomId;
+  final String username;
+  const ChatScreen({
+    super.key,
+    required this.userMap,
+    required this.chatRoomId,
+    required this.username,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Appbar ui
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Padding(
-          padding: EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            "Chats",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
+        // username text
+        title: Text(
+          username,
+          textAlign: TextAlign.left,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 27,
           ),
         ),
         centerTitle: false,
@@ -32,11 +39,12 @@ class ChatScreen extends StatelessWidget {
           ),
         ],
       ),
+      // Body begins
       body: const Column(
         children: [
-          // previous chat messages
+          // Previous chat messages
           ChatMessages(),
-          // send message row
+          // Send message row
           NewMessage(),
         ],
       ),

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 class UserCard extends StatefulWidget {
   final String username;
+  final void Function() onTap;
   const UserCard({
     super.key,
     required this.username,
+    required this.onTap,
   });
 
   @override
@@ -15,97 +17,102 @@ class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
     final username = widget.username;
-    return Container(
-      color: Colors.white,
+    return Material(
+      child: InkWell(
+        onTap: widget.onTap,
+        child: Container(
+          color: Colors.white,
 
-      // user card with divider
-      child: Column(
-        children: [
-          // user card row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // user card with divider
+          child: Column(
             children: [
-              // row for pfp, name, message
+              // user card row
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // user profile pic
-                  const CircleAvatar(
-                    radius: 32,
-                    backgroundImage: NetworkImage(
-                        'https://voluget.com/assets/images/rateing-profile.png'),
-                  ),
-
-                  // sizedbox
-                  const SizedBox(width: 15),
-
-                  // name and latest message
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  // row for pfp, name, message
+                  Row(
                     children: [
-                      Text(
-                        username,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
+                      // user profile pic
+                      const CircleAvatar(
+                        radius: 32,
+                        backgroundImage: NetworkImage(
+                            'https://voluget.com/assets/images/rateing-profile.png'),
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Latest Message',
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 11,
-                        ),
+
+                      // sizedbox
+                      const SizedBox(width: 15),
+
+                      // name and latest message
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            username,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Latest Message',
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
+                  ),
+
+                  // timestamp and status
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 5, 25, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // timestamp
+                        Text(
+                          '16:35',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 11,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+
+                        // unread message count
+                        CircleAvatar(
+                            radius: 10,
+                            backgroundColor: Color.fromRGBO(0, 193, 167, 1),
+                            child: Text(
+                              '2',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600),
+                            )),
+                      ],
+                    ),
                   ),
                 ],
               ),
 
-              // timestamp and status
-              const Padding(
-                padding: EdgeInsets.fromLTRB(0, 5, 25, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // timestamp
-                    Text(
-                      '16:35',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 11,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-
-                    // unread message count
-                    CircleAvatar(
-                        radius: 10,
-                        backgroundColor: Color.fromRGBO(0, 193, 167, 1),
-                        child: Text(
-                          '2',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600),
-                        )),
-                  ],
-                ),
-              ),
+              // Divider
+              const Divider(
+                indent: 70,
+                height: 20,
+              )
             ],
           ),
-
-          // Divider
-          const Divider(
-            indent: 70,
-            height: 20,
-          )
-        ],
+        ),
       ),
     );
   }

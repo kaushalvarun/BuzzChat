@@ -2,30 +2,27 @@ import 'package:buzzchatv2/components/my_button.dart';
 import 'package:buzzchatv2/components/my_text_field.dart';
 import 'package:buzzchatv2/components/square_tile.dart';
 import 'package:buzzchatv2/util/error_msg_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   final Function() onTap;
-  const RegisterPage({
+  const LoginPage({
     super.key,
     required this.onTap,
   });
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final _emailController = TextEditingController();
-  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
 
-  // sign user up method
-  void signUserUp() async {
+  // sign user in method
+  void signUserIn() async {
     // loading circle
     showDialog(
       context: context,
@@ -34,31 +31,24 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
 
-    // create user with email and password
     try {
-      if (_passwordController.text == _confirmPasswordController.text) {
-        Navigator.pop(context);
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-
-        // grab newly created user info
-        // ! signifies that user will not be null and will always exist
-        final user = FirebaseAuth.instance.currentUser!;
-        // add additional user data like username and store in firestore db
-        // add or update this users chat data in db
-
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'username': _usernameController.text,
-          'email': _emailController.text,
-        });
-      } else {
-        Navigator.pop(context);
-        showErrorMessage(context, 'Passwords don\'t match');
-      }
+      Navigator.pop(context);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.toLowerCase(),
+        password: _passwordController.text,
+      );
     } on FirebaseAuthException catch (e) {
-      showErrorMessage(context, e.code);
+      // WRONG username
+      if (e.code == "invalid-email") {
+        // ignore: use_build_context_synchronously
+        showErrorMessage(context, 'Wrong Username');
+      }
+
+      // WRONG password
+      else if (e.code == "INVALID_LOGIN_CREDENTIALS") {
+        // ignore: use_build_context_synchronously
+        showErrorMessage(context, 'Wrong Password');
+      }
     }
   }
 
@@ -74,7 +64,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 25,
                   ),
-
                   // logo
                   Image.asset(
                     'lib/images/buzzchatLogo.jpeg',
@@ -83,12 +72,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   const SizedBox(
-                    height: 20,
+                    height: 25,
                   ),
 
-                  // welcome
+                  // welcome back
                   const Text(
-                    'Welcome to our App!',
+                    'Welcome back, you\'ve been missed!',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -97,65 +86,49 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   const SizedBox(
-                    height: 15,
+                    height: 25,
                   ),
 
-                  // email field
+                  // username
                   MyTextField(
                     controller: _emailController,
                     hintText: 'Enter email',
                     obscureText: false,
                   ),
 
-                  // username field
-                  MyTextField(
-                    controller: _usernameController,
-                    hintText: 'Enter username',
-                    obscureText: false,
-                  ),
-
-                  // password field
+                  // password
                   MyTextField(
                     controller: _passwordController,
                     hintText: 'Enter password',
                     obscureText: true,
                   ),
 
-                  // confirm password field
-                  MyTextField(
-                    controller: _confirmPasswordController,
-                    hintText: 'Re-enter password',
-                    obscureText: true,
+                  // forgot password
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 25),
 
-                  // sign up button
+                  // sign in button
                   MyButton(
-                    onTap: signUserUp,
-                    msg: 'Sign Up',
+                    onTap: signUserIn,
+                    msg: 'Sign In',
                   ),
 
-                  const SizedBox(height: 20),
-
-                  // already a member, sign in
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Already a member?',
-                          style: TextStyle(color: Colors.grey[700])),
-                      const SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: widget.onTap,
-                        child: Text('Login here',
-                            style: TextStyle(
-                                color: Colors.blue[700],
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 25),
 
                   // or continue with
                   Row(
@@ -190,11 +163,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(width: 20),
                     SquareTile(
-                      imagePath: 'lib/images/apple.png',
-                      onTap: () => {}, //AuthService().signInWithGoogle(),
-                    ),
+                        imagePath: 'lib/images/apple.png',
+                        onTap: () => {} //AuthService().signInWithGoogle(),
+                        ),
                   ]),
-                  const SizedBox(height: 30),
+
+                  // not a member? register now
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Not a member?',
+                          style: TextStyle(color: Colors.grey[700])),
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text('Register Now',
+                            style: TextStyle(
+                                color: Colors.blue[700],
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

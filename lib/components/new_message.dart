@@ -10,6 +10,9 @@ class NewMessage extends StatefulWidget {
 }
 
 class _NewMessageState extends State<NewMessage> {
+  // Get connection to firebase firestore
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   final _msgController = TextEditingController();
 
   // frees memory used by controller after use
@@ -36,13 +39,11 @@ class _NewMessageState extends State<NewMessage> {
 
     // Fetching current user details
     final user = FirebaseAuth.instance.currentUser!;
-    final userData = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .get();
+
+    final userData = await _firestore.collection('users').doc(user.uid).get();
 
     // connect to Firestore and store chat data
-    FirebaseFirestore.instance.collection('chats').add({
+    _firestore.collection('chats').add({
       'text': enteredMsg,
       'timestamp': Timestamp.now(),
       // stored in firebase auth
@@ -52,6 +53,7 @@ class _NewMessageState extends State<NewMessage> {
     });
   }
 
+  // Ui for send message row
   @override
   Widget build(BuildContext context) {
     return Padding(

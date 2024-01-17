@@ -9,7 +9,9 @@ void showErrorMessage(BuildContext context, String errorMsg) async {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Center(child: const Text('OK')),
+          child: const Center(
+            child: Text('OK'),
+          ),
         ),
       ],
     ),

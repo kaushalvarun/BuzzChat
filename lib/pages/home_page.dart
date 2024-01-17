@@ -1,12 +1,58 @@
+import 'package:buzzchatv2/components/search_widget.dart';
+import 'package:buzzchatv2/components/user_card.dart';
+import 'package:buzzchatv2/pages/chat_screen.dart';
 import 'package:buzzchatv2/util/sign_out.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../components/user_card.dart';
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  // ChatRoom id
+  String chatRoomId = "123";
+
+  // Search bar functionality
+  bool isLoading = false;
+
+  // Search text
+  final TextEditingController _searchController = TextEditingController();
+
+  // Firestore instance
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // userMap
+  Map<String, dynamic>? userMap;
+  void onSearch() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await _firestore
+        .collection('users')
+        .where('email', isEqualTo: _searchController.text.toLowerCase())
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) {
+        setState(() {
+          isLoading = false;
+          userMap = null;
+        });
+      } else {
+        setState(() {
+          userMap = value.docs[0].data();
+          isLoading = false;
+        });
+      }
+    });
+  }
+
+  // current user
   final user = FirebaseAuth.instance.currentUser!;
 
   // stores list of all users
@@ -14,20 +60,23 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // UI
     return Scaffold(
+      // Appbar: 'Chats' and LogOut Button
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Padding(
-          padding: EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            "Chats",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Chats",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
+              ),
             ),
-          ),
+          ],
         ),
         centerTitle: false,
         actions: const [
@@ -38,46 +87,57 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        color: Colors.white,
-        height: double.infinity,
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // // Welcome user
-            // Container(
-            //   margin: const EdgeInsets.only(left: 10),
-            //   child: Text(
-            //     "Welcome " + user.email! + "!",
-            //     style: const TextStyle(
-            //       fontSize: 15,
-            //       fontWeight: FontWeight.w500,
-            //     ),
-            //   ),
-            // ),
 
-            const Divider(
-              indent: 75,
-              height: 20,
-            ),
-            // search
+      // Body: Search and List off chats
+      body: isLoading
+          ? const Center(
+              child: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : Container(
+              color: Colors.white,
+              height: double.infinity,
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // search box
+                  MySearchWidget(controller: _searchController),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: OutlinedButton(
+                      onPressed: onSearch,
+                      style:
+                          TextButton.styleFrom(foregroundColor: Colors.black),
+                      child: const Text('Search 🔎'),
+                    ),
+                  ),
 
-            // stories
-
-            // Chats
-
-            Expanded(
-              child: ListView.builder(
-                itemCount: usersList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return UserCard(username: usersList[index]);
-                },
+                  const SizedBox(height: 30),
+                  // Chats
+                  (userMap != null)
+                      ? UserCard(
+                          username: userMap!['username'],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                  userMap: userMap,
+                                  chatRoomId: chatRoomId,
+                                  username: userMap!['username'],
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : const Center(child: Text('User not found.')),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
