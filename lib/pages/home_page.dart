@@ -55,9 +55,6 @@ class _HomePageState extends State<HomePage> {
   // current user
   final user = FirebaseAuth.instance.currentUser!;
 
-  // stores list of all users
-  final usersList = ["User 1", "User 2", "User 3"];
-
   @override
   Widget build(BuildContext context) {
     // UI
@@ -127,7 +124,6 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                 builder: (context) => ChatScreen(
                                   userMap: userMap,
-                                  chatRoomId: chatRoomId,
                                   username: userMap!['username'],
                                 ),
                               ),

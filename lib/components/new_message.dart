@@ -1,9 +1,14 @@
+import 'package:buzzchatv2/util/chatroom_id.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewMessage extends StatefulWidget {
-  const NewMessage({super.key});
+  final String user2;
+  const NewMessage({
+    super.key,
+    required this.user2,
+  });
 
   @override
   State<NewMessage> createState() => _NewMessageState();
@@ -12,6 +17,8 @@ class NewMessage extends StatefulWidget {
 class _NewMessageState extends State<NewMessage> {
   // Get connection to firebase firestore
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // Get connection to firebase firestore
+  final FirebaseAuth _fireauth = FirebaseAuth.instance;
 
   final _msgController = TextEditingController();
 
@@ -34,23 +41,27 @@ class _NewMessageState extends State<NewMessage> {
 
     // reset text field
     _msgController.clear();
-    // close open keyyboard
+    // close opened keyyboard
     FocusScope.of(context).unfocus();
 
     // Fetching current user details
-    final user = FirebaseAuth.instance.currentUser!;
-
+    final user = _fireauth.currentUser!;
     final userData = await _firestore.collection('users').doc(user.uid).get();
+    String chatroomIdString = chatroomId(userData['username'], widget.user2);
 
-    // connect to Firestore and store chat data
-    _firestore.collection('chats').add({
-      'text': enteredMsg,
-      'timestamp': Timestamp.now(),
-      // stored in firebase auth
+    // Message stored in firestore db
+    Map<String, dynamic> messages = {
+      "sentby": userData['username'],
       'userid': user.uid,
-      // stored in firestore
-      'username': userData['username'], // access using key value pair
-    });
+      "text": enteredMsg,
+      "timestamp": Timestamp.now(),
+    };
+    // connect to Firestore and store chat data in chatroom, as per unique id
+    await _firestore
+        .collection('chatroom')
+        .doc(chatroomIdString)
+        .collection('chats')
+        .add(messages);
   }
 
   // Ui for send message row

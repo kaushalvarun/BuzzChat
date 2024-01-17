@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
   final Map<String, dynamic>? userMap;
-  final String chatRoomId;
   final String username;
   const ChatScreen({
     super.key,
     required this.userMap,
-    required this.chatRoomId,
     required this.username,
   });
 
@@ -40,13 +38,15 @@ class ChatScreen extends StatelessWidget {
         ],
       ),
       // Body begins
-      body: const Column(
-        children: [
-          // Previous chat messages
-          ChatMessages(),
-          // Send message row
-          NewMessage(),
-        ],
+      body: Expanded(
+        child: Column(
+          children: [
+            // Previous chat messages
+            ChatMessages(user2: username),
+            // Send message row
+            NewMessage(user2: username),
+          ],
+        ),
       ),
     );
   }
