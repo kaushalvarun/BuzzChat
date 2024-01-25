@@ -52,7 +52,7 @@ class _NewMessageState extends State<NewMessage> {
     // Message stored in firestore db
     Map<String, dynamic> messages = {
       "sentby": userData['username'],
-      'userid': user.uid,
+      'senderID': user.uid,
       "text": enteredMsg,
       "timestamp": Timestamp.now(),
     };

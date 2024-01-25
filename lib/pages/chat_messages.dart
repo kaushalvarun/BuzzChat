@@ -1,13 +1,14 @@
+import 'package:buzzchatv2/components/chat_bubble.dart';
 import 'package:buzzchatv2/util/chatroom_id.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatMessages extends StatefulWidget {
-  final String user2;
+  final String reciever;
   const ChatMessages({
     super.key,
-    required this.user2,
+    required this.reciever,
   });
 
   @override
@@ -15,17 +16,18 @@ class ChatMessages extends StatefulWidget {
 }
 
 class _ChatMessagesState extends State<ChatMessages> {
-  // Get connection to firebase firestore
+  // Get connection to firestore & auth
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  // Get connection to firebase firestore
   final FirebaseAuth _fireauth = FirebaseAuth.instance;
+
   // Store the chatroom ID
   String? chatroomIdString;
 
   Future<String> getChatRoom() async {
-    final user = _fireauth.currentUser!;
-    final userData = await _firestore.collection('users').doc(user.uid).get();
-    return chatroomId(userData['username'], widget.user2);
+    final currentUser = _fireauth.currentUser!;
+    final userData =
+        await _firestore.collection('users').doc(currentUser.uid).get();
+    return chatroomId(userData['username'], widget.reciever);
   }
 
   Future<void> _getChatRoomId() async {
@@ -41,33 +43,21 @@ class _ChatMessagesState extends State<ChatMessages> {
 
   @override
   Widget build(BuildContext context) {
+    // listening to firestore chatroom/chatroomId to get specific chat
+    // and then showing ui
     return StreamBuilder<QuerySnapshot>(
+      // stream firestore chatroom/chatroomId
       stream: chatroomIdString != null
           ? _firestore
               .collection('chatroom')
               .doc(chatroomIdString)
               .collection('chats')
               .orderBy('timestamp',
-                  descending: true) // as we are using list in reverse
+                  descending: false) // as we are using list in reverse
               .snapshots()
           : const Stream.empty(),
+      // builder ui
       builder: (context, snapshot) {
-        // waiting to connect to firestore
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        // no previous messages
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          const Expanded(
-            child: Center(
-              child: Text('No messages yet..'),
-            ),
-          );
-        }
-
         // error
         if (snapshot.hasError) {
           Expanded(
@@ -77,19 +67,53 @@ class _ChatMessagesState extends State<ChatMessages> {
           );
         }
 
-        // fetch messages from firestore and load them
+        // Loading
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        // Message list
+        // No previous messages
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          const Expanded(
+            child: Center(
+              child: Text('No messages yet..'),
+            ),
+          );
+        }
+
+        // Fetching & Loading messages from firestore
         final prevMessages = snapshot.data!.docs;
         return Expanded(
+          // List of messages
           child: ListView.builder(
             padding: const EdgeInsets.only(left: 14, right: 14, bottom: 40),
-            reverse: true, // to get bottom to top
+            reverse: false, // to get top to bottom
             itemCount: prevMessages.length,
             itemBuilder: (context, index) {
               final messageData = prevMessages[index].data()!
                   as Map<String, dynamic>; // Cast to Map
+
+              bool isCurrentUser =
+                  messageData['senderID'] == _fireauth.currentUser!.uid;
+
+              // color based on sender or reciever
+
               final messageText = messageData['text'];
-              return Text(
-                  messageText ?? 'No text found'); // Handle potential null
+              return Column(
+                // alignment of column based on sender or reciever
+                crossAxisAlignment: isCurrentUser
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
+                children: [
+                  ChatBubble(
+                    messageText: messageText,
+                    isCurrentUser: isCurrentUser,
+                  ),
+                ],
+              );
             },
           ),
         );

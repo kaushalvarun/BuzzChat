@@ -42,7 +42,7 @@ class ChatScreen extends StatelessWidget {
         child: Column(
           children: [
             // Previous chat messages
-            ChatMessages(user2: username),
+            ChatMessages(reciever: username),
             // Send message row
             NewMessage(user2: username),
           ],

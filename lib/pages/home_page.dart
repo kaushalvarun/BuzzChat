@@ -14,9 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // ChatRoom id
-  String chatRoomId = "123";
-
   // Search bar functionality
   bool isLoading = false;
 
@@ -104,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                   // search box
                   MySearchWidget(controller: _searchController),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: OutlinedButton(
                       onPressed: onSearch,
                       style:
@@ -130,7 +127,12 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         )
-                      : const Center(child: Text('User not found.')),
+                      : Center(
+                          child: Container(
+                          alignment: Alignment.center,
+                          child: const Text(
+                              'No Recent Chats Found.\nStart a new conversation by searching for a user.'),
+                        )),
                 ],
               ),
             ),
