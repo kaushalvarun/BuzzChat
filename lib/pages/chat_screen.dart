@@ -38,15 +38,17 @@ class ChatScreen extends StatelessWidget {
         ],
       ),
       // Body begins
-      body: Expanded(
-        child: Column(
-          children: [
-            // Previous chat messages
-            ChatMessages(reciever: username),
-            // Send message row
-            NewMessage(user2: username),
-          ],
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Flexible chat message section
+          ChatMessages(reciever: username),
+          // Flexible new message section
+          SizedBox(
+            height: 100,
+            child: NewMessage(user2: username),
+          ),
+        ],
       ),
     );
   }

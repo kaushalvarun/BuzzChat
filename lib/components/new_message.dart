@@ -77,7 +77,9 @@ class _NewMessageState extends State<NewMessage> {
               textCapitalization: TextCapitalization.sentences,
               autocorrect: true,
               controller: _msgController,
-              decoration: const InputDecoration(labelText: 'Send a message...'),
+              decoration: const InputDecoration(
+                hintText: 'Send a message...',
+              ),
             ),
           ),
 

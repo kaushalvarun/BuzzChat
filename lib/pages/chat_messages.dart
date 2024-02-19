@@ -60,7 +60,7 @@ class _ChatMessagesState extends State<ChatMessages> {
       builder: (context, snapshot) {
         // error
         if (snapshot.hasError) {
-          Expanded(
+          return Expanded(
             child: Center(
               child: Text('Something went wrong...\n error: ${snapshot.error}'),
             ),
@@ -69,7 +69,7 @@ class _ChatMessagesState extends State<ChatMessages> {
 
         // Loading
         if (snapshot.connectionState == ConnectionState.waiting) {
-          const Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -77,7 +77,7 @@ class _ChatMessagesState extends State<ChatMessages> {
         // Message list
         // No previous messages
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          const Expanded(
+          return const Expanded(
             child: Center(
               child: Text('No messages yet..'),
             ),
@@ -87,7 +87,6 @@ class _ChatMessagesState extends State<ChatMessages> {
         // Fetching & Loading messages from firestore
         final prevMessages = snapshot.data!.docs;
         return Expanded(
-          // List of messages
           child: ListView.builder(
             padding: const EdgeInsets.only(left: 14, right: 14, bottom: 40),
             reverse: false, // to get top to bottom
@@ -100,8 +99,8 @@ class _ChatMessagesState extends State<ChatMessages> {
                   messageData['senderID'] == _fireauth.currentUser!.uid;
 
               // color based on sender or reciever
-
               final messageText = messageData['text'];
+
               return Column(
                 // alignment of column based on sender or reciever
                 crossAxisAlignment: isCurrentUser

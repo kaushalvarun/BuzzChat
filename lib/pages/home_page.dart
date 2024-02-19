@@ -114,15 +114,14 @@ class _HomePageState extends State<HomePage> {
                   // Chats
                   (userMap != null)
                       ? UserCard(
-                          username: userMap!['username'],
+                          username: userMap!['username']!,
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatScreen(
-                                  userMap: userMap,
-                                  username: userMap!['username'],
-                                ),
+                                    userMap: userMap,
+                                    username: userMap!['username']!),
                               ),
                             );
                           },
