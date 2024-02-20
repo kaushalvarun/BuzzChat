@@ -1,6 +1,6 @@
 import 'package:buzzchatv2/components/search_widget.dart';
 import 'package:buzzchatv2/components/user_card.dart';
-import 'package:buzzchatv2/pages/chat_screen.dart';
+import 'package:buzzchatv2/pages/chat/chat_screen.dart';
 import 'package:buzzchatv2/util/sign_out.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // Search bar functionality
-  bool isLoading = false;
+  bool _isLoading = false;
 
   // Search text
   final TextEditingController _searchController = TextEditingController();
@@ -23,11 +23,12 @@ class _HomePageState extends State<HomePage> {
   // Firestore instance
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // userMap
+  // local variable to store  userMap fetched from firestore
   Map<String, dynamic>? userMap;
+
   void onSearch() async {
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
 
     await _firestore
@@ -37,13 +38,13 @@ class _HomePageState extends State<HomePage> {
         .then((value) {
       if (value.docs.isEmpty) {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
           userMap = null;
         });
       } else {
         setState(() {
           userMap = value.docs[0].data();
-          isLoading = false;
+          _isLoading = false;
         });
       }
     });
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
       ),
 
       // Body: Search and List off chats
-      body: isLoading
+      body: _isLoading
           ? const Center(
               child: SizedBox(
                 height: 20,
