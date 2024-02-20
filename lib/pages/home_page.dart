@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                   const SizedBox(height: 30),
-                  // Chats
+                  // user chat card
                   (userMap != null)
                       ? UserCard(
                           username: userMap!['username']!,
