@@ -20,41 +20,38 @@ class ChatBubble extends StatelessWidget {
     final alignment =
         isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start;
     return Row(
-      mainAxisAlignment:
-          isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment: alignment,
       children: [
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          decoration: BoxDecoration(
-            color: bubbleColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: alignment,
-                children: [
-                  Text(
-                    messageText,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Helvetica',
-                    ),
+        Flexible(
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            decoration: BoxDecoration(
+              color: bubbleColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  messageText,
+                  softWrap: true,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Helvetica',
                   ),
-                ],
-              ),
-              Text(
-                msgTimestamp,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'Helvetica',
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: 0.5,
                 ),
-              ),
-            ],
+                Text(
+                  msgTimestamp,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Helvetica',
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

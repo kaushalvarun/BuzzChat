@@ -85,102 +85,121 @@ class _UserCardState extends State<UserCard> {
           final Timestamp timestamp = latestMsgData['timestamp'] as Timestamp;
 
           return Material(
-            child: InkWell(
-              onTap: widget.onTap,
-              child: Container(
-                color: Colors.white,
+            child: Expanded(
+              child: InkWell(
+                onTap: widget.onTap,
+                child: Container(
+                  color: Colors.white,
 
-                // user card with divider
-                child: Column(
-                  children: [
-                    // user card row
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // row for pfp, name, message
-                        Row(
-                          children: [
-                            // user profile pic
-                            Image.asset(
-                              'lib/images/userDefaultPhoto.png',
-                              height: 65,
-                            ),
-
-                            // sizedbox
-                            const SizedBox(width: 5),
-
-                            // name and latest message
-                            // fetch latest message from firestore
-
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                  // user card with divider
+                  child: Column(
+                    children: [
+                      // main user card and timestamp row
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // telling row to fill available space on screen
+                          Expanded(
+                            child: Row(
                               children: [
-                                Text(
-                                  username,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                  ),
+                                // user profile pic
+                                Image.asset(
+                                  'lib/images/userDefaultPhoto.png',
+                                  height: 65,
                                 ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  latestMsgData['text'],
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 12.5,
+
+                                // sizedbox
+                                const SizedBox(width: 5),
+
+                                // name and latest message
+                                // fetch latest message from firestore
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // username
+                                      Text(
+                                        username,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+
+                                      // latest message
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 5, 0),
+                                        child: Text(
+                                          latestMsgData['text'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: Colors.grey[700],
+                                            fontSize: 12.5,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-
-                        // timestamp and status
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 5, 25, 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // timestamp
-
-                              Text(
-                                formatTimestamp(timestamp),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 11,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-
-                              // unread message count
-                              // const CircleAvatar(
-                              //     radius: 10,
-                              //     backgroundColor:
-                              //         Color.fromRGBO(0, 193, 167, 1),
-                              //     child: Text(
-                              //       '2',
-                              //       style: TextStyle(
-                              //           color: Colors.white,
-                              //           fontSize: 10,
-                              //           fontWeight: FontWeight.w600),
-                              //     )),
-                            ],
                           ),
-                        ),
-                      ],
-                    ),
 
-                    // Divider
-                    const Divider(
-                      indent: 70,
-                      height: 20,
-                    )
-                  ],
+                          // timestamp and status
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 25, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // timestamp
+
+                                Text(
+                                  formatTimestamp(timestamp),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+
+                                // unread message count
+                                // const CircleAvatar(
+                                //     radius: 10,
+                                //     backgroundColor:
+                                //         Color.fromRGBO(0, 193, 167, 1),
+                                //     child: Text(
+                                //       '2',
+                                //       style: TextStyle(
+                                //           color: Colors.white,
+                                //           fontSize: 10,
+                                //           fontWeight: FontWeight.w600),
+                                //     )),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // Divider
+                      const Divider(
+                        indent: 70,
+                        height: 20,
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
