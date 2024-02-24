@@ -77,9 +77,22 @@ class _NewMessageState extends State<NewMessage> {
               textCapitalization: TextCapitalization.sentences,
               autocorrect: true,
               controller: _msgController,
-              decoration: const InputDecoration(
+              maxLines: null, // to wrap input text
+              minLines: 1,
+              decoration: InputDecoration(
                 hintText: 'Send a message...',
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                focusedBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+
+                isDense: true, // Reduces the overall height of the TextField
               ),
+
+              // trigger rebuild if longer wrapped text
+              onChanged: (value) {
+                setState(() {});
+              },
             ),
           ),
 

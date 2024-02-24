@@ -44,11 +44,8 @@ class ChatScreen extends StatelessWidget {
         children: [
           // Flexible chat message section
           ChatMessages(reciever: username),
-          // Flexible new message section
-          SizedBox(
-            height: 100,
-            child: NewMessage(user2: username),
-          ),
+          // Remaining space to new message section (enter message)
+          NewMessage(user2: username),
         ],
       ),
     );
