@@ -1,5 +1,5 @@
-import 'package:buzzchatv2/components/search_widget.dart';
-import 'package:buzzchatv2/components/user_card.dart';
+import 'package:buzzchatv2/components/home_screen/search_widget.dart';
+import 'package:buzzchatv2/components/home_screen/user_card.dart';
 import 'package:buzzchatv2/pages/chat/chat_screen.dart';
 import 'package:buzzchatv2/util/sign_out.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

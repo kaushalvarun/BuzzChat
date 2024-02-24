@@ -1,10 +1,10 @@
 import 'package:buzzchatv2/components/chat_screen/chat_bubble.dart';
+import 'package:buzzchatv2/components/chat_screen/date_text.dart';
 import 'package:buzzchatv2/pages/chat/chatroom_id.dart';
 import 'package:buzzchatv2/pages/chat/format_timestamp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ChatMessages extends StatefulWidget {
   final String reciever;
@@ -55,7 +55,7 @@ class _ChatMessagesState extends State<ChatMessages> {
               .doc(chatroomIdString)
               .collection('chats')
               .orderBy('timestamp',
-                  descending: false) // as we are using list in reverse
+                  descending: true) // as we are using list in reverse
               .snapshots()
           : const Stream.empty(),
       // builder ui
@@ -94,7 +94,7 @@ class _ChatMessagesState extends State<ChatMessages> {
           child: ListView.builder(
             itemCount: prevMessages.length,
             padding: const EdgeInsets.only(left: 14, right: 14, bottom: 40),
-            reverse: false, // to get top to bottom
+            reverse: true, // to get top to bottom
 
             itemBuilder: (context, index) {
               // getting current message data
@@ -107,78 +107,83 @@ class _ChatMessagesState extends State<ChatMessages> {
               // color based on sender or reciever
               final messageText = messageData['text'];
 
-              final msgTimestamp = formatTimestamp(messageData['timestamp']);
+              final msgTime = formatTimestamp(messageData['timestamp']);
+
+              final DateTime msgDate =
+                  (messageData['timestamp'] as Timestamp).toDate();
 
               /* code to group messages by date */
 
-              final DateTime date =
-                  (messageData['timestamp'] as Timestamp).toDate();
-              bool isSameDate = false; // first message
+              // only single message in prevmessages
+              if (index == 0 && prevMessages.length == 1) {
+                return Column(
+                  children: [
+                    // if date is today or yesterday or other
+                    DateText(date: msgDate),
 
-              // check if current date is same as previous date
-              if (index > 0) {
-                final prevMessageData = prevMessages[index - 1].data()!
-                    as Map<String, dynamic>; // Cast to Map
-                final DateTime prevDate = prevMessageData['timestamp'].toDate();
-                isSameDate = date.isSameDate(prevDate);
-              }
-
-              if (index == 0 || !(isSameDate)) {
-                // create new group of current date
-                return Column(children: [
-                  // if date is today or yesterday
-                  dateText(date),
-
-                  ChatBubble(
-                    messageText: messageText,
-                    isCurrentUser: isCurrentUser,
-                    msgTimestamp: msgTimestamp,
-                  ),
-                ]);
-              }
-              // add this message to previous group, same day messages
-              else {
-                return ChatBubble(
-                  messageText: messageText,
-                  isCurrentUser: isCurrentUser,
-                  msgTimestamp: msgTimestamp,
+                    ChatBubble(
+                      messageText: messageText,
+                      isCurrentUser: isCurrentUser,
+                      msgTimestamp: msgTime,
+                    ),
+                  ],
                 );
+              }
+              // more than 1 message in message list
+              else {
+                //  oldest message
+                if (index == prevMessages.length - 1) {
+                  return Column(
+                    children: [
+                      // if date is today or yesterday or other
+                      DateText(date: msgDate),
+                      ChatBubble(
+                        messageText: messageText,
+                        isCurrentUser: isCurrentUser,
+                        msgTimestamp: msgTime,
+                      ),
+                    ],
+                  );
+                }
+
+                // newest message or any message which is not oldest message
+                else {
+                  final prevMessageData = prevMessages[index + 1].data()!
+                      as Map<String, dynamic>; // Cast to Map
+                  // prev message date
+                  final DateTime prevDate =
+                      prevMessageData['timestamp'].toDate();
+
+                  // check if prev msg date is same as curr msg date and store result
+                  final bool isSameDate = msgDate.isSameDate(prevDate);
+
+                  if (isSameDate) {
+                    // add this message to previous group, same day messages
+                    return ChatBubble(
+                      messageText: messageText,
+                      isCurrentUser: isCurrentUser,
+                      msgTimestamp: msgTime,
+                    );
+                  } else {
+                    // create new group of current date
+                    return Column(
+                      children: [
+                        // if date is today or yesterday or other
+                        DateText(date: msgDate),
+                        ChatBubble(
+                          messageText: messageText,
+                          isCurrentUser: isCurrentUser,
+                          msgTimestamp: msgTime,
+                        ),
+                      ],
+                    );
+                  }
+                }
               }
             },
           ),
         );
       },
     );
-  }
-}
-
-// helper functions to group messages by date
-const String dateFormatter = 'MMMM dd, y';
-
-extension DateHelper on DateTime {
-  String formatDate() {
-    final formatter = DateFormat(dateFormatter);
-    return formatter.format(this);
-  }
-
-  bool isSameDate(DateTime other) {
-    // here yere is this.year, etc
-    return year == other.year && month == other.month && day == other.day;
-  }
-}
-
-// check if date is today, yesterday or other date
-Text dateText(DateTime date) {
-  // date istoday
-  if (date.isSameDate(DateTime.now())) {
-    return const Text('Today');
-  }
-  // date is yesterday
-  else if (date.isSameDate(DateTime.now().subtract(const Duration(days: 1)))) {
-    return const Text('Yesterday');
-  }
-  // other date
-  else {
-    return Text(date.formatDate());
   }
 }

@@ -1,6 +1,6 @@
-import 'package:buzzchatv2/components/my_button.dart';
-import 'package:buzzchatv2/components/my_text_field.dart';
-import 'package:buzzchatv2/components/square_tile.dart';
+import 'package:buzzchatv2/components/general_components/my_button.dart';
+import 'package:buzzchatv2/components/general_components/my_text_field.dart';
+import 'package:buzzchatv2/components/general_components/square_tile.dart';
 import 'package:buzzchatv2/util/error_msg_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

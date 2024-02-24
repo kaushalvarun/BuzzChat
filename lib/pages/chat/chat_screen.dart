@@ -37,6 +37,7 @@ class ChatScreen extends StatelessWidget {
           ),
         ],
       ),
+
       // Body begins
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
