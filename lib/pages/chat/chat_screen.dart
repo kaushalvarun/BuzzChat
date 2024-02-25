@@ -45,7 +45,13 @@ class ChatScreen extends StatelessWidget {
           // Flexible chat message section
           ChatMessages(reciever: username),
           // Remaining space to new message section (enter message)
-          NewMessage(user2: username),
+          SingleChildScrollView(
+            child: Container(
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.5),
+              child: NewMessage(user2: username),
+            ),
+          ),
         ],
       ),
     );
