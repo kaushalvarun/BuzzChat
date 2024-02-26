@@ -172,19 +172,6 @@ class _UserCardState extends State<UserCard> {
                               const SizedBox(
                                 height: 10,
                               ),
-
-                              // unread message count
-                              // const CircleAvatar(
-                              //     radius: 10,
-                              //     backgroundColor:
-                              //         Color.fromRGBO(0, 193, 167, 1),
-                              //     child: Text(
-                              //       '2',
-                              //       style: TextStyle(
-                              //           color: Colors.white,
-                              //           fontSize: 10,
-                              //           fontWeight: FontWeight.w600),
-                              //     )),
                             ],
                           ),
                         ),
