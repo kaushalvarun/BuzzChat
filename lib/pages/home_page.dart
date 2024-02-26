@@ -77,7 +77,14 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         actions: [
           // go to all groups page
-          IconButton(onPressed: _displayGroups, icon: const Icon(Icons.group)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const DisplayGroups()));
+              },
+              icon: const Icon(Icons.group)),
 
           // log out
           const IconButton(
@@ -142,10 +149,5 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
     );
-  }
-
-  void _displayGroups() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const DisplayGroups()));
   }
 }

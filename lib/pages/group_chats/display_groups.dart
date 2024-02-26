@@ -12,17 +12,17 @@ class DisplayGroups extends StatefulWidget {
 class _DisplayGroupsState extends State<DisplayGroups> {
   final List<GroupTile> groups = [
     GroupTile(
-      grouptitle: 'Group 1',
+      groupName: 'Group 1',
       latestMessage: 'Latest Message',
       timestamp: Timestamp.now(),
     ),
     GroupTile(
-      grouptitle: 'Group 2',
+      groupName: 'Group 2',
       latestMessage: 'Latest Message',
       timestamp: Timestamp.now(),
     ),
     GroupTile(
-      grouptitle: 'Group 3',
+      groupName: 'Group 3',
       latestMessage: 'Latest Message',
       timestamp: Timestamp.now(),
     ),

@@ -1,14 +1,16 @@
 import 'package:buzzchatv2/pages/chat/format_timestamp.dart';
+import 'package:buzzchatv2/pages/group_chats/group_chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class GroupTile extends StatefulWidget {
-  final String grouptitle;
+  final String groupName;
   final String latestMessage;
   final Timestamp timestamp;
+
   const GroupTile({
     super.key,
-    required this.grouptitle,
+    required this.groupName,
     required this.latestMessage,
     required this.timestamp,
   });
@@ -23,6 +25,13 @@ class _GroupTileState extends State<GroupTile> {
     return Column(
       children: [
         ListTile(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        GroupChatScreen(groupName: widget.groupName)));
+          },
           leading: SizedBox(
             width: 80,
             child: Image.asset(
@@ -34,7 +43,7 @@ class _GroupTileState extends State<GroupTile> {
             children: [
               Expanded(
                 child: Text(
-                  widget.grouptitle,
+                  widget.groupName,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
