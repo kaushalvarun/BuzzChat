@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   // local variable to store  userMap fetched from firestore
   Map<String, dynamic>? userMap;
 
-  void onSearch() async {
+  void _onSearch() async {
     setState(() {
       _isLoading = true;
     });
@@ -112,15 +112,30 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // search box
-                  MySearchWidget(controller: _searchController),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: OutlinedButton(
-                      onPressed: onSearch,
-                      style:
-                          TextButton.styleFrom(foregroundColor: Colors.black),
-                      child: const Text('Search 🔎'),
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: MySearchWidget(controller: _searchController),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: ElevatedButton(
+                          onPressed: _onSearch,
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.black26,
+                              elevation: 0,
+                              shape: const BeveledRectangleBorder(),
+                              foregroundColor: Colors.black),
+                          child: const Padding(
+                            padding: EdgeInsets.only(top: 15, bottom: 15),
+                            child: Text(
+                              '🔎',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
 
                   const SizedBox(height: 30),
@@ -139,12 +154,38 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         )
-                      : Center(
-                          child: Container(
-                          alignment: Alignment.center,
-                          child: const Text(
-                              'No Recent Chats Found.\nStart a new conversation by searching for a user.'),
-                        )),
+                      : const Expanded(
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    'No Recent Chats Found',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Text(
+                                      'Start a new conversation\n by searching for a user',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
                 ],
               ),
             ),
