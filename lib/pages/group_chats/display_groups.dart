@@ -1,4 +1,5 @@
 import 'package:buzzchatv2/components/group_chat/group_tile.dart';
+import 'package:buzzchatv2/pages/group_chats/create_group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -55,6 +56,25 @@ class _DisplayGroupsState extends State<DisplayGroups> {
               ],
             );
           }),
+      floatingActionButton: FloatingActionButton(
+        elevation: 1,
+        // circular shape
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        backgroundColor: Colors.blue[200],
+        child: Container(
+            decoration: const BoxDecoration(shape: BoxShape.circle),
+            child: const Icon(Icons.add)),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateGroup(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -54,8 +54,19 @@ class _GroupMessagesState extends State<GroupMessages> {
         // error
         if (snapshot.hasError) {
           return Expanded(
-            child: Center(
-              child: Text('Something went wrong...\n Error: ${snapshot.error}'),
+            child: Column(
+              children: [
+                const Text(
+                  'User created this group',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Center(
+                  child: Text(
+                      'Something went wrong...\n Error: ${snapshot.error}'),
+                ),
+              ],
             ),
           );
         }
@@ -69,10 +80,26 @@ class _GroupMessagesState extends State<GroupMessages> {
 
         // Message list
         // No previous messages
+        const userGroupCreator = 'User';
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return const Expanded(
-            child: Center(
-              child: Text('No messages yet..'),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    '$userGroupCreator created this group',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text('No messages yet..'),
+                  ),
+                ),
+              ],
             ),
           );
         }
@@ -126,8 +153,19 @@ class _GroupMessagesState extends State<GroupMessages> {
                 if (index == prevMessages.length - 1) {
                   return Column(
                     children: [
+                      const Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          '$userGroupCreator created this group',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+
                       // if date is today or yesterday or other
                       DateText(date: msgDate),
+
                       ChatBubble(
                         messageText: messageText,
                         isCurrentUser: isCurrentUser,
