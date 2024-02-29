@@ -1,6 +1,8 @@
 import 'package:buzzchatv2/components/general_components/my_button.dart';
 import 'package:buzzchatv2/components/general_components/my_text_field.dart';
 import 'package:buzzchatv2/components/general_components/square_tile.dart';
+import 'package:buzzchatv2/group.dart';
+import 'package:buzzchatv2/user.dart';
 import 'package:buzzchatv2/util/error_msg_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,6 +54,8 @@ class _RegisterPageState extends State<RegisterPage> {
           'username': _usernameController.text,
           'email': _emailController.text,
           'status': 'Unavailable',
+          'groups': <Group>[],
+          'recentChats': <BcUser>[],
         });
       } else {
         Navigator.pop(context);

@@ -90,7 +90,7 @@ class _CreateGroupState extends State<CreateGroup> {
                               )));
                 }
               },
-              msg: 'Create Group',
+              msg: 'Add Members',
             ),
           ],
         ),

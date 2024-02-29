@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class AddUserTile extends StatelessWidget {
   final String username;
-  final void Function() onTap;
+  final void Function() onPressed;
   const AddUserTile({
     super.key,
-    required this.onTap,
+    required this.onPressed,
     required this.username,
   });
 
@@ -14,7 +14,6 @@ class AddUserTile extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          onTap: onTap,
           title: Row(
             children: [
               Padding(
@@ -41,9 +40,7 @@ class AddUserTile extends StatelessWidget {
           ),
           trailing: IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () {
-              // implement please
-            },
+            onPressed: onPressed,
           ),
           dense: true,
           visualDensity: const VisualDensity(vertical: 2.5),

@@ -19,7 +19,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Appbar ui
+      // Appbar
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
