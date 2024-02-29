@@ -1,10 +1,14 @@
-import 'package:buzzchatv2/components/group_chat/group_chatroom_id.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewGroupMessage extends StatefulWidget {
-  const NewGroupMessage({super.key});
+  final String? chatroomId;
+
+  const NewGroupMessage({
+    super.key,
+    required this.chatroomId,
+  });
 
   @override
   State<NewGroupMessage> createState() => _NewGroupMessageState();
@@ -36,7 +40,6 @@ class _NewGroupMessageState extends State<NewGroupMessage> {
     // Fetching current user details
     final user = _fireauth.currentUser!;
     final userData = await _firestore.collection('users').doc(user.uid).get();
-    chatroomIdString = await getGroupChatRoomId();
 
     // Message to be stored in firestore db
     Map<String, dynamic> messages = {
@@ -48,8 +51,8 @@ class _NewGroupMessageState extends State<NewGroupMessage> {
 
     // connect to Firestore and store chat data in chatroom, as per unique id
     await _firestore
-        .collection('chatroom')
-        .doc(chatroomIdString)
+        .collection('group_chatrooms')
+        .doc(widget.chatroomId)
         .collection('chats')
         .add(messages);
   }

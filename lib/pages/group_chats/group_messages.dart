@@ -1,14 +1,18 @@
 import 'package:buzzchatv2/components/chat_screen/chat_bubble.dart';
 import 'package:buzzchatv2/components/chat_screen/date_text.dart';
-import 'package:buzzchatv2/components/group_chat/group_chatroom_id.dart';
 import 'package:buzzchatv2/pages/chat/format_timestamp.dart';
+import 'package:buzzchatv2/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class GroupMessages extends StatefulWidget {
+  final BcUser creatorOfGroup;
+  final String? chatroomId;
   const GroupMessages({
     super.key,
+    required this.creatorOfGroup,
+    required this.chatroomId,
   });
 
   @override
@@ -20,30 +24,16 @@ class _GroupMessagesState extends State<GroupMessages> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _fireauth = FirebaseAuth.instance;
 
-  // Store the chatroom ID
-  String? chatroomIdString;
-
-  Future<void> _getGroupChatRoomId() async {
-    chatroomIdString = await getGroupChatRoomId();
-    setState(() {}); // Trigger a rebuild to use the fetched ID
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getGroupChatRoomId(); // Fetch the ID when the widget initializes
-  }
-
   @override
   Widget build(BuildContext context) {
     // listening to firestore chatroom/chatroomId to get specific chat
     // and then showing ui
     return StreamBuilder<QuerySnapshot>(
       // stream firestore chatroom/chatroomId
-      stream: chatroomIdString != null
+      stream: (widget.chatroomId != null)
           ? _firestore
-              .collection('chatroom')
-              .doc(chatroomIdString)
+              .collection('group_chatrooms')
+              .doc(widget.chatroomId)
               .collection('chats')
               .orderBy('timestamp',
                   descending: true) // as we are using list in reverse
@@ -56,10 +46,24 @@ class _GroupMessagesState extends State<GroupMessages> {
           return Expanded(
             child: Column(
               children: [
-                const Text(
-                  'User created this group',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.creatorOfGroup.getUsername(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        ' created this group',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Center(
@@ -80,21 +84,31 @@ class _GroupMessagesState extends State<GroupMessages> {
 
         // Message list
         // No previous messages
-        const userGroupCreator = 'User';
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Expanded(
+          return Expanded(
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    '$userGroupCreator created this group',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.creatorOfGroup.getUsername(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        ' created this group',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   child: Center(
                     child: Text('No messages yet..'),
                   ),
@@ -153,13 +167,24 @@ class _GroupMessagesState extends State<GroupMessages> {
                 if (index == prevMessages.length - 1) {
                   return Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          '$userGroupCreator created this group',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.creatorOfGroup.getUsername(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              ' created this group',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 

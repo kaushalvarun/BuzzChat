@@ -1,14 +1,19 @@
 import 'package:buzzchatv2/components/group_chat/new_group_msg.dart';
 import 'package:buzzchatv2/pages/group_chats/group_messages.dart';
+import 'package:buzzchatv2/user.dart';
 import 'package:buzzchatv2/util/sign_out.dart';
 import 'package:flutter/material.dart';
 
 class GroupChatScreen extends StatefulWidget {
+  final BcUser creatorOfGroup;
+  final String groupChatroomId;
   final String groupName;
 
   const GroupChatScreen({
     super.key,
+    required this.groupChatroomId,
     required this.groupName,
+    required this.creatorOfGroup,
   });
 
   @override
@@ -44,13 +49,18 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
 
       body: Column(children: [
         // load previous messages
-        const GroupMessages(),
+        GroupMessages(
+          creatorOfGroup: widget.creatorOfGroup,
+          chatroomId: widget.groupChatroomId,
+        ),
         // to send new message section (enter message)
         SingleChildScrollView(
           child: Container(
             constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height * 0.5),
-            child: const NewGroupMessage(),
+            child: NewGroupMessage(
+              chatroomId: widget.groupChatroomId,
+            ),
           ),
         ),
       ]),

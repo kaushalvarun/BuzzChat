@@ -1,6 +1,6 @@
 import 'package:buzzchatv2/components/group_chat/group_tile.dart';
 import 'package:buzzchatv2/pages/group_chats/create_group.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DisplayGroups extends StatefulWidget {
@@ -11,23 +11,7 @@ class DisplayGroups extends StatefulWidget {
 }
 
 class _DisplayGroupsState extends State<DisplayGroups> {
-  final List<GroupTile> groups = [
-    GroupTile(
-      groupName: 'Group 1',
-      latestMessage: 'Latest Message',
-      timestamp: Timestamp.now(),
-    ),
-    GroupTile(
-      groupName: 'Group 2',
-      latestMessage: 'Latest Message',
-      timestamp: Timestamp.now(),
-    ),
-    GroupTile(
-      groupName: 'Group 3',
-      latestMessage: 'Latest Message',
-      timestamp: Timestamp.now(),
-    ),
-  ];
+  final List<GroupTile> groups = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

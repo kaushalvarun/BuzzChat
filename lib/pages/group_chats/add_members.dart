@@ -1,6 +1,8 @@
 import 'package:buzzchatv2/components/general_components/my_button.dart';
 import 'package:buzzchatv2/components/group_chat/add_user_tile.dart';
 import 'package:buzzchatv2/components/home_screen/search_widget.dart';
+import 'package:buzzchatv2/pages/group_chats/group_chat_screen.dart';
+import 'package:buzzchatv2/pages/group_chats/group_chatroom_id.dart.dart';
 import 'package:buzzchatv2/user.dart';
 import 'package:buzzchatv2/util/current_user_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,16 +24,6 @@ class _AddMembersState extends State<AddMembers> {
   // Firestore instance
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // is loading variable to keep track when data is being fetched
-  bool _isLoading = false;
-  final TextEditingController _searchController = TextEditingController();
-
-  // map of users recieved from onSearch
-  Map<String, dynamic>? userMap;
-
-  // to be added user
-  BcUser? toBeAddedUser;
-
   // current user, group creator
   final User cUser = FirebaseAuth.instance.currentUser!;
 
@@ -44,6 +36,7 @@ class _AddMembersState extends State<AddMembers> {
   @override
   void initState() {
     super.initState();
+    // to get current user details
     fetchCurrentUserDetails(cUser).then((user) {
       currentUser = user;
 
@@ -54,7 +47,28 @@ class _AddMembersState extends State<AddMembers> {
         });
       }
     });
+    // to get chatroomId
+    _groupChatRoomId();
   }
+
+  // chatroom id for this group
+  String? groupChatroomId;
+
+  // function to get group chatroom id
+  Future<void> _groupChatRoomId() async {
+    groupChatroomId = await createGroupChatRoomId();
+    setState(() {}); // trigger rebuild when fetched
+  }
+
+  // is loading variable to keep track when data is being fetched
+  bool _isLoading = false;
+  final TextEditingController _searchController = TextEditingController();
+
+  // map of users recieved from onSearch
+  Map<String, dynamic>? userMap;
+
+  // to be added user
+  BcUser? toBeAddedUser;
 
   // on search function to get user details and set isLoading
   void _onSearch() async {
@@ -155,10 +169,19 @@ class _AddMembersState extends State<AddMembers> {
                       // create group button
                       MyButton(
                         onTap: () {
-                          // generate group chat room id
                           // for each user in added members add it to list of their groups
 
-                          // go to group chat screen
+                          // generate group chat room id & go to group chat screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GroupChatScreen(
+                                groupName: widget.groupName,
+                                groupChatroomId: groupChatroomId!,
+                                creatorOfGroup: currentUser!,
+                              ),
+                            ),
+                          );
                         },
                         msg: 'Create Group',
                       ),
