@@ -1,5 +1,5 @@
+import 'package:buzzchatv2/components/home_screen/new_user_card.dart';
 import 'package:buzzchatv2/components/home_screen/search_widget.dart';
-import 'package:buzzchatv2/components/home_screen/user_card.dart';
 import 'package:buzzchatv2/pages/chat/chat_screen.dart';
 import 'package:buzzchatv2/pages/group_chats/display_groups.dart';
 import 'package:buzzchatv2/util/sign_out.dart';
@@ -27,11 +27,15 @@ class _HomePageState extends State<HomePage> {
   // local variable to store  userMap fetched from firestore
   Map<String, dynamic>? userMap;
 
+  // current user
+  final user = FirebaseAuth.instance.currentUser!;
   void _onSearch() async {
+    // set to Loading as searching
     setState(() {
       _isLoading = true;
     });
 
+    // return user details
     await _firestore
         .collection('users')
         .where('email', isEqualTo: _searchController.text.toLowerCase())
@@ -50,9 +54,6 @@ class _HomePageState extends State<HomePage> {
       }
     });
   }
-
-  // current user
-  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -127,10 +128,10 @@ class _HomePageState extends State<HomePage> {
                               shape: const BeveledRectangleBorder(),
                               foregroundColor: Colors.black),
                           child: const Padding(
-                            padding: EdgeInsets.only(top: 15, bottom: 15),
-                            child: Text(
-                              '🔎',
-                              style: TextStyle(fontSize: 20),
+                            padding: EdgeInsets.only(top: 18, bottom: 18),
+                            child: Icon(
+                              Icons.search,
+                              size: 25,
                             ),
                           ),
                         ),
@@ -148,8 +149,9 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatScreen(
-                                    userMap: userMap,
-                                    username: userMap!['username']!),
+                                  userMap: userMap,
+                                  username: userMap!['username']!,
+                                ),
                               ),
                             );
                           },
