@@ -1,18 +1,70 @@
+// import 'package:buzzchatv2/group.dart';
+import 'package:buzzchatv2/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<String> createGroupChatRoomId() async {
-  // Reference to the Firestore collection where group chat rooms are stored
-  CollectionReference<Map<String, dynamic>> groupChatRooms =
-      FirebaseFirestore.instance.collection('group_chatrooms');
+FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Add a new document to the collection (Firestore will automatically generate a unique ID for the document)
-  DocumentReference newGroupChatRoomRef = await groupChatRooms.add({
-    'createdAt': Timestamp.now(),
-    'members': [],
-  });
-
-  // Retrieve the auto-generated document ID
-  String groupChatRoomId = newGroupChatRoomRef.id;
-
-  return groupChatRoomId;
+Future<String> generateChatroomId() async {
+  // Generate a unique chatroom ID
+  String chatroomId =
+      FirebaseFirestore.instance.collection('group_chatrooms').doc().id;
+  return chatroomId;
 }
+
+Future<void> addGroupInfoToDb(String chatroomId, String groupName,
+    String creatorOfGroup, List<BcUser> members) async {
+  // Convert each BcUser object into a map to store in db
+  List<Map<String, dynamic>> memberData =
+      members.map((member) => member.toMap()).toList();
+
+  // add group info to document in 'group_chatrooms'
+  Map<String, dynamic> groupData = {
+    'groupName': groupName,
+    'creatorOfGroup': creatorOfGroup,
+    'members': memberData,
+  };
+
+  await _firestore.collection('group_chatrooms').doc(chatroomId).set(groupData);
+
+  // update 'group_ids' for each member of this group, adding this group
+  for (BcUser member in members) {
+    try {
+      QuerySnapshot userSnapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: member.getEmail())
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        // Get user document ID
+        String userId = userSnapshot.docs[0].id;
+        // Update user's 'groups' field
+        await _firestore.collection('users').doc(userId).update({
+          'groups': FieldValue.arrayUnion(
+              [groupData]) // Add current group to 'groups'
+        });
+        // ignore: avoid_print
+        print('Updated user groups');
+      }
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error updating user groups: $e');
+    }
+  }
+}
+
+// Future<List<Group>> readGroupDataFromDb(BcUser currentUser) async {
+//   await _firestore
+//       .collection('users')
+//       .where('email', isEqualTo: currentUser.getEmail())
+//       .get()
+//       .then((value) {
+//     if (value.docs.isEmpty) {
+//       // ignore: avoid_print
+//       print('User doesn\'t exist');
+//     } else {
+//       Map<String, dynamic> userMap = value.docs[0].data();
+//       List<Map<String, dynamic>> groupsInMap = userMap['groups'];
+//       return Li
+//     }
+//   });
+// }

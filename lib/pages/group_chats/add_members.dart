@@ -56,7 +56,7 @@ class _AddMembersState extends State<AddMembers> {
 
   // function to get group chatroom id
   Future<void> _groupChatRoomId() async {
-    groupChatroomId = await createGroupChatRoomId();
+    groupChatroomId = await generateChatroomId();
     setState(() {}); // trigger rebuild when fetched
   }
 
@@ -92,12 +92,15 @@ class _AddMembersState extends State<AddMembers> {
       } else {
         setState(() {
           userMap = value.docs[0].data();
+          List<Map<String, dynamic>> groups =
+              (userMap!['groups'] as List<dynamic>)
+                  .map((group) => group as Map<String, dynamic>)
+                  .toList();
           toBeAddedUser = BcUser(
             username: userMap!['username'],
             email: userMap!['email'],
             status: userMap!['status'],
-            groups: userMap!['groups'],
-            recentChats: userMap!['recentChats'],
+            groups: groups,
           );
           _isLoading = false;
         });
@@ -170,6 +173,17 @@ class _AddMembersState extends State<AddMembers> {
                       MyButton(
                         onTap: () {
                           // for each user in added members add it to list of their groups
+                          addGroupInfoToDb(groupChatroomId!, widget.groupName,
+                                  currentUser!.getUsername(), addedMembers)
+                              .then((_) {
+                            // Handle success
+                            // ignore: avoid_print
+                            print('Group information added successfully!');
+                          }).catchError((error) {
+                            // Handle error
+                            // ignore: avoid_print
+                            print('Error adding group information: $error');
+                          });
 
                           // generate group chat room id & go to group chat screen
                           Navigator.push(

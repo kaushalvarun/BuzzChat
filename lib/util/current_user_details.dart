@@ -17,12 +17,16 @@ Future<BcUser?> fetchCurrentUserDetails(User? user) async {
     } else {
       Map<String, dynamic> userMap = value.docs[0].data();
 
+      // Ensure 'groups' field is casted correctly to List<Map<String, dynamic>>
+      List<Map<String, dynamic>> groups = (userMap['groups'] as List<dynamic>)
+          .map((group) => group as Map<String, dynamic>)
+          .toList();
       currentUser = BcUser(
-          username: userMap['username'],
-          email: userMap['email'],
-          status: userMap['status'],
-          groups: userMap['groups'],
-          recentChats: userMap['recentChats']);
+        username: userMap['username'],
+        email: userMap['email'],
+        status: userMap['status'],
+        groups: groups,
+      );
     }
   });
   return currentUser;
