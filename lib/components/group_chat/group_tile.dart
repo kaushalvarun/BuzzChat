@@ -1,22 +1,16 @@
-import 'package:buzzchatv2/pages/chat/format_timestamp.dart';
+// import 'package:buzzchatv2/pages/chat/format_timestamp.dart';
 import 'package:buzzchatv2/pages/group_chats/group_chat_screen.dart';
-import 'package:buzzchatv2/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class GroupTile extends StatefulWidget {
-  final BcUser creatorOfGroup;
+  final String creatorOfGroup;
   final String groupName;
-  final String latestMessage;
-  final Timestamp timestamp;
   final String groupChatroomId;
 
   const GroupTile({
     super.key,
     required this.groupName,
     required this.groupChatroomId,
-    required this.latestMessage,
-    required this.timestamp,
     required this.creatorOfGroup,
   });
 
@@ -61,19 +55,20 @@ class _GroupTileState extends State<GroupTile> {
                 ),
               ),
               const SizedBox(width: 8), // Adjust as needed
-              Text(
-                formatTimestamp(widget.timestamp),
-                textAlign: TextAlign.end,
-                style: const TextStyle(fontSize: 11),
-              ),
+              // Text(
+              //   formatTimestamp(widget.timestamp),
+              //   textAlign: TextAlign.end,
+              //   style: const TextStyle(fontSize: 11),
+              // ),
             ],
           ),
-          subtitle: Text(
-            widget.latestMessage,
+          subtitle: const Text(
+            'Latest message',
+            // widget.latestMessage,
             maxLines: 1,
             softWrap: false,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12.5,
             ),
           ),

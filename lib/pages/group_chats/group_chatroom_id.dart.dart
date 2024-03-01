@@ -1,4 +1,5 @@
 // import 'package:buzzchatv2/group.dart';
+import 'package:buzzchatv2/group.dart';
 import 'package:buzzchatv2/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -22,6 +23,7 @@ Future<void> addGroupInfoToDb(String chatroomId, String groupName,
     'groupName': groupName,
     'creatorOfGroup': creatorOfGroup,
     'members': memberData,
+    'groupChatRoomId': chatroomId,
   };
 
   await _firestore.collection('group_chatrooms').doc(chatroomId).set(groupData);
@@ -52,19 +54,20 @@ Future<void> addGroupInfoToDb(String chatroomId, String groupName,
   }
 }
 
-// Future<List<Group>> readGroupDataFromDb(BcUser currentUser) async {
-//   await _firestore
-//       .collection('users')
-//       .where('email', isEqualTo: currentUser.getEmail())
-//       .get()
-//       .then((value) {
-//     if (value.docs.isEmpty) {
-//       // ignore: avoid_print
-//       print('User doesn\'t exist');
-//     } else {
-//       Map<String, dynamic> userMap = value.docs[0].data();
-//       List<Map<String, dynamic>> groupsInMap = userMap['groups'];
-//       return Li
-//     }
-//   });
-// }
+Future<List<Group>> readGroupDataFromDb(BcUser currentUser) async {
+  List<Map<String, dynamic>> groupsInMap = [];
+  await _firestore
+      .collection('users')
+      .where('email', isEqualTo: currentUser.getEmail())
+      .get()
+      .then((value) {
+    if (value.docs.isEmpty) {
+      // ignore: avoid_print
+      print('User doesn\'t exist');
+    } else {
+      Map<String, dynamic> userMap = value.docs[0].data();
+      groupsInMap = List<Map<String, dynamic>>.from(userMap['groups']);
+    }
+  });
+  return getListOfGroupFromListOfMap(groupsInMap);
+}

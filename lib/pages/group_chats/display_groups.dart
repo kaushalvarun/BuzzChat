@@ -1,5 +1,10 @@
 import 'package:buzzchatv2/components/group_chat/group_tile.dart';
+import 'package:buzzchatv2/group.dart';
 import 'package:buzzchatv2/pages/group_chats/create_group.dart';
+import 'package:buzzchatv2/pages/group_chats/group_chatroom_id.dart.dart';
+import 'package:buzzchatv2/user.dart';
+import 'package:buzzchatv2/util/current_user_details.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +16,25 @@ class DisplayGroups extends StatefulWidget {
 }
 
 class _DisplayGroupsState extends State<DisplayGroups> {
-  final List<GroupTile> groups = [];
+  List<Group> groups = List.empty();
+  final User cUser = FirebaseAuth.instance.currentUser!;
+  BcUser? currUser;
+  @override
+  void initState() {
+    super.initState();
+    _readGrpFromDb();
+  }
+
+  Future<void> _readGrpFromDb() async {
+    await fetchCurrentUserDetails(cUser).then((user) {
+      setState(() {
+        currUser = user;
+      });
+    });
+    groups = await readGroupDataFromDb(currentUser!);
+    setState(() {}); // trigger rebuild when fetched
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +59,13 @@ class _DisplayGroupsState extends State<DisplayGroups> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                groups[index],
+                GroupTile(
+                  groupName: groups[index].getGroupName(),
+                  groupChatroomId: groups[index].getGroupChatRoomId(),
+                  // latestMessage: latestMessage,
+                  // timestamp: timestamp,
+                  creatorOfGroup: groups[index].getCreatorOfGroup(),
+                ),
               ],
             );
           }),

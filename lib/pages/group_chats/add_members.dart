@@ -192,7 +192,7 @@ class _AddMembersState extends State<AddMembers> {
                               builder: (context) => GroupChatScreen(
                                 groupName: widget.groupName,
                                 groupChatroomId: groupChatroomId!,
-                                creatorOfGroup: currentUser!,
+                                creatorOfGroup: currentUser!.getUsername(),
                               ),
                             ),
                           );

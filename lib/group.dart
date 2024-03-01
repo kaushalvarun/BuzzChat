@@ -4,7 +4,7 @@ class Group {
   String _groupName;
   List<BcUser> _members;
   // String _description;
-  BcUser _creatorOfGroup;
+  String _creatorOfGroup;
   // List<BcUser> _admins;
   String _groupChatRoomId;
 
@@ -12,7 +12,7 @@ class Group {
     required String groupName,
     required List<BcUser> members,
     // required String description,
-    required BcUser creatorOfGroup,
+    required String creatorOfGroup,
     // required List<BcUser> admins,
     required String groupChatRoomId,
   })  : _groupName = groupName,
@@ -28,7 +28,7 @@ class Group {
       // 'description': _description,
       'groupChatRoomId': _groupChatRoomId,
       'members': _members.map((user) => user.toMap()).toList(),
-      'creatorOfGroup': _creatorOfGroup.toMap(),
+      'creatorOfGroup': _creatorOfGroup,
       // 'admins': _admins.map((user) => user.toMap()).toList(),
     };
   }
@@ -57,11 +57,11 @@ class Group {
   //   _description = description;
   // }
 
-  BcUser getCreatorOfGroup() {
+  String getCreatorOfGroup() {
     return _creatorOfGroup;
   }
 
-  void setCreatorOfGroup(BcUser creator) {
+  void setCreatorOfGroup(String creator) {
     _creatorOfGroup = creator;
   }
 
@@ -80,17 +80,29 @@ class Group {
   void setGroupChatRoomId(String id) {
     _groupChatRoomId = id;
   }
+}
 
-  List<Group> getListOfGroupFromListOfMap(
-      List<Map<String, dynamic>> groupsInMap) {
-    List<Group> groups = [];
-    for (Map<String, dynamic> groupMap in groupsInMap) {
-      groups.add(Group(
-          groupName: groupMap['groupName'],
-          members: groupMap['members'],
-          creatorOfGroup: groupMap['creatorOfGroup'],
-          groupChatRoomId: groupMap['groupChatRoomId']));
+List<Group> getListOfGroupFromListOfMap(
+    List<Map<String, dynamic>> groupsInMap) {
+  List<Group> groups = [];
+  for (Map<String, dynamic> groupMap in groupsInMap) {
+    List<BcUser> members = [];
+    for (Map<String, dynamic> memberMap in groupMap['members']) {
+      members.add(BcUser(
+        username: memberMap['username'],
+        email: memberMap['email'],
+        status: memberMap['status'],
+        groups: List<Map<String, dynamic>>.from(memberMap['groups']),
+      ));
     }
-    return groups;
+    groups.add(
+      Group(
+        groupName: groupMap['groupName'],
+        members: members,
+        creatorOfGroup: groupMap['creatorOfGroup'],
+        groupChatRoomId: groupMap['groupChatRoomId'],
+      ),
+    );
   }
+  return groups;
 }

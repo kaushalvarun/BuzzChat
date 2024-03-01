@@ -1,13 +1,12 @@
 import 'package:buzzchatv2/components/chat_screen/chat_bubble.dart';
 import 'package:buzzchatv2/components/chat_screen/date_text.dart';
 import 'package:buzzchatv2/pages/chat/format_timestamp.dart';
-import 'package:buzzchatv2/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class GroupMessages extends StatefulWidget {
-  final BcUser creatorOfGroup;
+  final String creatorOfGroup;
   final String? chatroomId;
   const GroupMessages({
     super.key,
@@ -52,7 +51,7 @@ class _GroupMessagesState extends State<GroupMessages> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.creatorOfGroup.getUsername(),
+                        widget.creatorOfGroup,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -94,7 +93,7 @@ class _GroupMessagesState extends State<GroupMessages> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.creatorOfGroup.getUsername(),
+                        widget.creatorOfGroup,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -173,7 +172,7 @@ class _GroupMessagesState extends State<GroupMessages> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              widget.creatorOfGroup.getUsername(),
+                              widget.creatorOfGroup,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
