@@ -149,6 +149,26 @@ class _GroupMessagesState extends State<GroupMessages> {
               if (index == 0 && prevMessages.length == 1) {
                 return Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.creatorOfGroup,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const Text(
+                            ' created this group',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     // if date is today or yesterday or other
                     DateText(date: msgDate),
 
