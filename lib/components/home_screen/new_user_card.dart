@@ -1,3 +1,4 @@
+import 'package:buzz_chat/components/general_components/photo_container.dart';
 import 'package:buzz_chat/pages/chat/chatroom_id.dart';
 import 'package:buzz_chat/pages/chat/format_timestamp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -77,16 +78,7 @@ class _UserCardState extends State<UserCard> {
                 onTap: widget.onTap,
                 title: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: SizedBox(
-                        width: 60,
-                        child: Image.asset(
-                          'lib/images/groupDefault.png',
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
-                    ),
+                    const PhotoContainer(width: 60),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(

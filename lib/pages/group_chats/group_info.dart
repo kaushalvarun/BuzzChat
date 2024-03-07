@@ -1,3 +1,4 @@
+import 'package:buzz_chat/components/general_components/photo_container.dart';
 import 'package:buzz_chat/group.dart';
 import 'package:buzz_chat/user.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class GroupInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<BcUser> members = groupData.getMembers();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -27,10 +29,16 @@ class GroupInfo extends StatelessWidget {
       ),
       body: Column(
         children: [
+          // Group Photo, Name, and members
           Center(
             child: Column(
               children: [
-                // Group Name and members
+                // photo
+                const PhotoContainer(
+                  width: 120,
+                ),
+
+                // name
                 Text(
                   groupData.getGroupName(),
                   style: const TextStyle(
@@ -38,6 +46,8 @@ class GroupInfo extends StatelessWidget {
                     fontSize: 25,
                   ),
                 ),
+
+                // members text
                 Text(
                   'Group : ${members.length} members',
                   style: const TextStyle(
