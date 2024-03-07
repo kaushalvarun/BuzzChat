@@ -1,4 +1,4 @@
-import 'package:buzzchatv2/user.dart';
+import 'package:buzz_chat/user.dart';
 
 class Group {
   String _groupName;

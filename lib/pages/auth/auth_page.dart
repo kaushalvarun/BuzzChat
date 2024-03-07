@@ -1,6 +1,6 @@
-import 'package:buzzchatv2/pages/auth/login_or_register_page.dart';
-import 'package:buzzchatv2/pages/home_page.dart';
-import 'package:buzzchatv2/pages/splash_screen.dart';
+import 'package:buzz_chat/pages/auth/login_or_register_page.dart';
+import 'package:buzz_chat/pages/home_page.dart';
+import 'package:buzz_chat/pages/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

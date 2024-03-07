@@ -1,6 +1,6 @@
-import 'package:buzzchatv2/components/chat_screen/new_message.dart';
-import 'package:buzzchatv2/pages/chat/chat_messages.dart';
-import 'package:buzzchatv2/util/sign_out.dart';
+import 'package:buzz_chat/components/chat_screen/new_message.dart';
+import 'package:buzz_chat/pages/chat/chat_messages.dart';
+import 'package:buzz_chat/util/sign_out.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {

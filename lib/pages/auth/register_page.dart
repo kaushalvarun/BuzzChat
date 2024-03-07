@@ -1,9 +1,9 @@
-import 'package:buzzchatv2/components/general_components/my_button.dart';
-import 'package:buzzchatv2/components/general_components/my_text_field.dart';
-import 'package:buzzchatv2/components/general_components/square_tile.dart';
-import 'package:buzzchatv2/group.dart';
-import 'package:buzzchatv2/user.dart';
-import 'package:buzzchatv2/util/error_msg_dialog.dart';
+import 'package:buzz_chat/components/general_components/my_button.dart';
+import 'package:buzz_chat/components/general_components/my_text_field.dart';
+import 'package:buzz_chat/components/general_components/square_tile.dart';
+import 'package:buzz_chat/group.dart';
+import 'package:buzz_chat/user.dart';
+import 'package:buzz_chat/util/error_msg_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

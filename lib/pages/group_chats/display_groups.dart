@@ -1,9 +1,9 @@
-import 'package:buzzchatv2/components/group_chat/group_tile.dart';
-import 'package:buzzchatv2/group.dart';
-import 'package:buzzchatv2/pages/group_chats/create_group.dart';
-import 'package:buzzchatv2/pages/group_chats/group_chatroom_id.dart.dart';
-import 'package:buzzchatv2/user.dart';
-import 'package:buzzchatv2/util/current_user_details.dart';
+import 'package:buzz_chat/components/group_chat/group_tile.dart';
+import 'package:buzz_chat/group.dart';
+import 'package:buzz_chat/pages/group_chats/create_group.dart';
+import 'package:buzz_chat/pages/group_chats/group_chatroom_id.dart.dart';
+import 'package:buzz_chat/user.dart';
+import 'package:buzz_chat/util/current_user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

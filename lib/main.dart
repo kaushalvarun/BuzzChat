@@ -1,4 +1,4 @@
-import 'package:buzzchatv2/pages/auth/auth_page.dart';
+import 'package:buzz_chat/pages/auth/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';

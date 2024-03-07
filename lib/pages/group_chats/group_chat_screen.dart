@@ -1,6 +1,6 @@
-import 'package:buzzchatv2/components/group_chat/new_group_msg.dart';
-import 'package:buzzchatv2/pages/group_chats/group_messages.dart';
-import 'package:buzzchatv2/util/sign_out.dart';
+import 'package:buzz_chat/components/group_chat/new_group_msg.dart';
+import 'package:buzz_chat/pages/group_chats/group_messages.dart';
+import 'package:buzz_chat/util/sign_out.dart';
 import 'package:flutter/material.dart';
 
 class GroupChatScreen extends StatefulWidget {

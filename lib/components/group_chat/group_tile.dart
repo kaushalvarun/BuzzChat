@@ -1,5 +1,5 @@
-// import 'package:buzzchatv2/pages/chat/format_timestamp.dart';
-import 'package:buzzchatv2/pages/group_chats/group_chat_screen.dart';
+// import 'package:buzz_chat/pages/chat/format_timestamp.dart';
+import 'package:buzz_chat/pages/group_chats/group_chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class GroupTile extends StatefulWidget {

@@ -1,6 +1,6 @@
-import 'package:buzzchatv2/components/chat_screen/chat_bubble.dart';
-import 'package:buzzchatv2/components/chat_screen/date_text.dart';
-import 'package:buzzchatv2/pages/chat/format_timestamp.dart';
+import 'package:buzz_chat/components/chat_screen/chat_bubble.dart';
+import 'package:buzz_chat/components/chat_screen/date_text.dart';
+import 'package:buzz_chat/pages/chat/format_timestamp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

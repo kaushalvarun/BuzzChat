@@ -1,10 +1,10 @@
-import 'package:buzzchatv2/components/general_components/my_button.dart';
-import 'package:buzzchatv2/components/group_chat/add_user_tile.dart';
-import 'package:buzzchatv2/components/home_screen/search_widget.dart';
-import 'package:buzzchatv2/pages/group_chats/group_chat_screen.dart';
-import 'package:buzzchatv2/pages/group_chats/group_chatroom_id.dart.dart';
-import 'package:buzzchatv2/user.dart';
-import 'package:buzzchatv2/util/current_user_details.dart';
+import 'package:buzz_chat/components/general_components/my_button.dart';
+import 'package:buzz_chat/components/group_chat/add_user_tile.dart';
+import 'package:buzz_chat/components/home_screen/search_widget.dart';
+import 'package:buzz_chat/pages/group_chats/group_chat_screen.dart';
+import 'package:buzz_chat/pages/group_chats/group_chatroom_id.dart.dart';
+import 'package:buzz_chat/user.dart';
+import 'package:buzz_chat/util/current_user_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -177,12 +177,10 @@ class _AddMembersState extends State<AddMembers> {
                                   currentUser!.getUsername(), addedMembers)
                               .then((_) {
                             // Handle success
-                            // ignore: avoid_print
-                            print('Group information added successfully!');
+                            // print('Group information added successfully!');
                           }).catchError((error) {
                             // Handle error
-                            // ignore: avoid_print
-                            print('Error adding group information: $error');
+                            // print('Error adding group information: $error');
                           });
 
                           // generate group chat room id & go to group chat screen

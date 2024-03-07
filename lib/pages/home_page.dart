@@ -1,8 +1,8 @@
-import 'package:buzzchatv2/components/home_screen/new_user_card.dart';
-import 'package:buzzchatv2/components/home_screen/search_widget.dart';
-import 'package:buzzchatv2/pages/chat/chat_screen.dart';
-import 'package:buzzchatv2/pages/group_chats/display_groups.dart';
-import 'package:buzzchatv2/util/sign_out.dart';
+import 'package:buzz_chat/components/home_screen/new_user_card.dart';
+import 'package:buzz_chat/components/home_screen/search_widget.dart';
+import 'package:buzz_chat/pages/chat/chat_screen.dart';
+import 'package:buzz_chat/pages/group_chats/display_groups.dart';
+import 'package:buzz_chat/util/sign_out.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

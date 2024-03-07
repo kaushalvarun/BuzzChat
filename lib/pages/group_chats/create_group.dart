@@ -1,5 +1,5 @@
-import 'package:buzzchatv2/components/general_components/my_button.dart';
-import 'package:buzzchatv2/pages/group_chats/add_members.dart';
+import 'package:buzz_chat/components/general_components/my_button.dart';
+import 'package:buzz_chat/pages/group_chats/add_members.dart';
 import 'package:flutter/material.dart';
 
 class CreateGroup extends StatefulWidget {

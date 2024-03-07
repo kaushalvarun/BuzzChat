@@ -1,5 +1,5 @@
-import 'package:buzzchatv2/pages/auth/login_page.dart';
-import 'package:buzzchatv2/pages/auth/register_page.dart';
+import 'package:buzz_chat/pages/auth/login_page.dart';
+import 'package:buzz_chat/pages/auth/register_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginOrRegister extends StatefulWidget {

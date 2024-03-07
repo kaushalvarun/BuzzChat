@@ -1,6 +1,6 @@
-// import 'package:buzzchatv2/group.dart';
-import 'package:buzzchatv2/group.dart';
-import 'package:buzzchatv2/user.dart';
+// import 'package:buzz_chat/group.dart';
+import 'package:buzz_chat/group.dart';
+import 'package:buzz_chat/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -44,12 +44,10 @@ Future<void> addGroupInfoToDb(String chatroomId, String groupName,
           'groups': FieldValue.arrayUnion(
               [groupData]) // Add current group to 'groups'
         });
-        // ignore: avoid_print
-        print('Updated user groups');
+        // print('Updated user groups');
       }
     } catch (e) {
-      // ignore: avoid_print
-      print('Error updating user groups: $e');
+      // print('Error updating user groups: $e');
     }
   }
 }
@@ -62,8 +60,7 @@ Future<List<Group>> readGroupDataFromDb(BcUser currentUser) async {
       .get()
       .then((value) {
     if (value.docs.isEmpty) {
-      // ignore: avoid_print
-      print('User doesn\'t exist');
+      // print('User doesn\'t exist');
     } else {
       Map<String, dynamic> userMap = value.docs[0].data();
       groupsInMap = List<Map<String, dynamic>>.from(userMap['groups']);
