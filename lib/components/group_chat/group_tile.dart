@@ -1,17 +1,20 @@
 // import 'package:buzz_chat/pages/chat/format_timestamp.dart';
 import 'package:buzz_chat/pages/group_chats/group_chat_screen.dart';
+import 'package:buzz_chat/user.dart';
 import 'package:flutter/material.dart';
 
 class GroupTile extends StatefulWidget {
   final String creatorOfGroup;
   final String groupName;
   final String groupChatroomId;
+  final List<BcUser> groupMembers;
 
   const GroupTile({
     super.key,
     required this.groupName,
     required this.groupChatroomId,
     required this.creatorOfGroup,
+    required this.groupMembers,
   });
 
   @override
@@ -29,6 +32,7 @@ class _GroupTileState extends State<GroupTile> {
               context,
               MaterialPageRoute(
                 builder: (context) => GroupChatScreen(
+                  groupMembers: widget.groupMembers,
                   groupName: widget.groupName,
                   groupChatroomId: widget.groupChatroomId,
                   creatorOfGroup: widget.creatorOfGroup,

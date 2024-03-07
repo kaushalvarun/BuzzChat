@@ -1,5 +1,8 @@
 import 'package:buzz_chat/components/group_chat/new_group_msg.dart';
+import 'package:buzz_chat/group.dart';
+import 'package:buzz_chat/pages/group_chats/group_info.dart';
 import 'package:buzz_chat/pages/group_chats/group_messages.dart';
+import 'package:buzz_chat/user.dart';
 import 'package:buzz_chat/util/sign_out.dart';
 import 'package:flutter/material.dart';
 
@@ -7,12 +10,14 @@ class GroupChatScreen extends StatefulWidget {
   final String creatorOfGroup;
   final String groupChatroomId;
   final String groupName;
+  final List<BcUser> groupMembers;
 
   const GroupChatScreen({
     super.key,
     required this.groupChatroomId,
     required this.groupName,
     required this.creatorOfGroup,
+    required this.groupMembers,
   });
 
   @override
@@ -28,12 +33,28 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
         // username text
-        title: Text(
-          widget.groupName,
-          textAlign: TextAlign.left,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 27,
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GroupInfo(
+                  groupData: Group(
+                      groupName: widget.groupName,
+                      members: widget.groupMembers,
+                      creatorOfGroup: widget.creatorOfGroup,
+                      groupChatRoomId: widget.groupChatroomId),
+                ),
+              ),
+            );
+          },
+          child: Text(
+            widget.groupName,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 27,
+            ),
           ),
         ),
         centerTitle: false,

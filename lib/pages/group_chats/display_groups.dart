@@ -60,6 +60,7 @@ class _DisplayGroupsState extends State<DisplayGroups> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GroupTile(
+                  groupMembers: groups[index].getMembers(),
                   groupName: groups[index].getGroupName(),
                   groupChatroomId: groups[index].getGroupChatRoomId(),
                   // latestMessage: latestMessage,

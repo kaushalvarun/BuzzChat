@@ -191,6 +191,7 @@ class _AddMembersState extends State<AddMembers> {
                                 groupName: widget.groupName,
                                 groupChatroomId: groupChatroomId!,
                                 creatorOfGroup: currentUser!.getUsername(),
+                                groupMembers: addedMembers,
                               ),
                             ),
                           );
