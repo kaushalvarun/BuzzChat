@@ -38,7 +38,7 @@ class _CreateGroupState extends State<CreateGroup> {
               textCapitalization: TextCapitalization.sentences,
               autocorrect: true,
               controller: _groupNameController,
-              maxLines: null, // to wrap input text
+              maxLines: null,
               minLines: 1,
               decoration: InputDecoration(
                 hintText: 'Enter Group Name',
@@ -55,7 +55,10 @@ class _CreateGroupState extends State<CreateGroup> {
               },
             ),
             const SizedBox(height: 40),
+
+            // add members button
             MyButton(
+              msg: 'Add Members',
               onTap: () {
                 // create group in db
                 // go to add members page
@@ -83,14 +86,15 @@ class _CreateGroupState extends State<CreateGroup> {
                       });
                 } else {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddMembers(
-                                groupName: _groupNameController.text,
-                              )));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddMembers(
+                        groupName: _groupNameController.text,
+                      ),
+                    ),
+                  );
                 }
               },
-              msg: 'Add Members',
             ),
           ],
         ),

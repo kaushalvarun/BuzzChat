@@ -4,7 +4,6 @@ import 'package:buzz_chat/components/home_screen/search_widget.dart';
 import 'package:buzz_chat/pages/group_chats/group_chat_screen.dart';
 import 'package:buzz_chat/pages/group_chats/group_chatroom_id.dart.dart';
 import 'package:buzz_chat/user.dart';
-import 'package:buzz_chat/util/current_user_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,24 +29,21 @@ class _AddMembersState extends State<AddMembers> {
   // get current user details
   BcUser? currentUser;
 
+  Future<void> _getUserFromEmail() async {
+    currentUser = await userfromEmail(cUser.email!);
+    setState(() {});
+  }
+
   // added Members
-  List<BcUser> addedMembers = [];
+  List<String> addedMembers = [];
 
   @override
   void initState() {
     super.initState();
-    // to get current user details
-    fetchCurrentUserDetails(cUser).then((user) {
-      currentUser = user;
-
-      if (currentUser != null) {
-        // update ui & add currentUser to addMembers
-        setState(() {
-          addedMembers.add(currentUser!);
-        });
-      }
-    });
+    // add current user email to addedmembers
+    addedMembers.add(cUser.email!);
     // to get chatroomId
+    _getUserFromEmail();
     _groupChatRoomId();
   }
 
@@ -78,34 +74,31 @@ class _AddMembersState extends State<AddMembers> {
     });
 
     // return user details
-    await _firestore
-        .collection('users')
-        .where('email', isEqualTo: _searchController.text.toLowerCase())
-        .get()
-        .then((value) {
-      if (value.docs.isEmpty) {
-        setState(() {
-          _isLoading = false;
-          userMap = null;
-          toBeAddedUser = null;
-        });
-      } else {
-        setState(() {
-          userMap = value.docs[0].data();
-          List<Map<String, dynamic>> groups =
-              (userMap!['groups'] as List<dynamic>)
-                  .map((group) => group as Map<String, dynamic>)
-                  .toList();
-          toBeAddedUser = BcUser(
-            username: userMap!['username'],
-            email: userMap!['email'],
-            status: userMap!['status'],
-            groups: groups,
-          );
-          _isLoading = false;
-        });
-      }
-    });
+    try {
+      await _firestore
+          .collection('users')
+          .where('email', isEqualTo: _searchController.text.toLowerCase())
+          .get()
+          .then((value) {
+        // user details not found
+        if (value.docs.isEmpty) {
+          setState(() {
+            _isLoading = false;
+            userMap = null;
+            toBeAddedUser = null;
+          });
+        } else {
+          setState(() {
+            userMap = value.docs[0].data();
+            toBeAddedUser = BcUser.fromJson(userMap!);
+            _isLoading = false;
+          });
+        }
+      });
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error searching, Error:$e');
+    }
   }
 
   @override
@@ -171,32 +164,53 @@ class _AddMembersState extends State<AddMembers> {
 
                       // create group button
                       MyButton(
-                        onTap: () {
-                          // for each user in added members add it to list of their groups
-                          addGroupInfoToDb(groupChatroomId!, widget.groupName,
-                                  currentUser!.getUsername(), addedMembers)
-                              .then((_) {
-                            // Handle success
-                            // print('Group information added successfully!');
-                          }).catchError((error) {
-                            // Handle error
-                            // print('Error adding group information: $error');
-                          });
-
-                          // generate group chat room id & go to group chat screen
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => GroupChatScreen(
-                                groupName: widget.groupName,
-                                groupChatroomId: groupChatroomId!,
-                                creatorOfGroup: currentUser!.getUsername(),
-                                groupMembers: addedMembers,
-                              ),
-                            ),
-                          );
-                        },
                         msg: 'Create Group',
+                        onTap: () async {
+                          try {
+                            // 1. for each user in added members add it to list of their groups
+                            // 2. also store this group info in db
+                            // asynchronous code handled with await
+                            if (groupChatroomId == null) {
+                              // ignore: avoid_print
+                              print('groupChatroomId is null');
+                            }
+
+                            if (currentUser == null) {
+                              // ignore: avoid_print
+                              print('currentUser is null');
+                            }
+
+                            await addGroupInfoToDb(
+                              groupChatroomId!,
+                              widget.groupName,
+                              currentUser!.getUsername(),
+                              addedMembers,
+                            );
+                            // Success case
+                            // ignore: avoid_print
+                            print('Group information added successfully!');
+
+                            // generate group chat room id & go to group chat screen
+                            // Check if the context is still mounted before navigating
+                            if (context.mounted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GroupChatScreen(
+                                    groupName: widget.groupName,
+                                    groupChatroomId: groupChatroomId!,
+                                    creatorOfGroup: currentUser!.getUsername(),
+                                    groupMembers: addedMembers,
+                                  ),
+                                ),
+                              );
+                            }
+                          } catch (error) {
+                            // Handle error
+                            // ignore: avoid_print
+                            print('Error adding group information: $error');
+                          }
+                        },
                       ),
 
                       const SizedBox(height: 30),
@@ -217,16 +231,45 @@ class _AddMembersState extends State<AddMembers> {
                         ),
                       ),
 
+                      // added members list view
                       (userMap != null)
                           ? ((!_removed)
                               ? (Expanded(
-                                  child: _addedMemberList(
+                                  child: FutureBuilder<Padding>(
+                                  future: _addedMemberList(
                                     toBeAddedUser!,
                                     addedMembers,
                                   ),
-                                ))
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    } else {
+                                      if (snapshot.hasData) {
+                                        return snapshot.data!;
+                                      } else {
+                                        return Text('Error: ${snapshot.error}');
+                                      }
+                                    }
+                                  },
+                                )))
                               : (Expanded(
-                                  child: buildAddedMemberList(addedMembers),
+                                  child: FutureBuilder<Padding>(
+                                    future: buildAddedMemberList(addedMembers),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      } else {
+                                        if (snapshot.hasData) {
+                                          return snapshot.data!;
+                                        } else {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        }
+                                      }
+                                    },
+                                  ),
                                 )))
                           : Container(),
                     ],
@@ -238,11 +281,11 @@ class _AddMembersState extends State<AddMembers> {
   bool _removed = false;
 
   bool _addMember(BcUser toBeAddedUser) {
-    if (addedMembers.contains(toBeAddedUser)) {
+    if (addedMembers.contains(toBeAddedUser.getEmail())) {
       return false;
     }
     setState(() {
-      addedMembers.add(toBeAddedUser);
+      addedMembers.add(toBeAddedUser.getEmail());
     });
     return true;
   }
@@ -250,12 +293,18 @@ class _AddMembersState extends State<AddMembers> {
   void _removeMember(BcUser toBeRemovedUser) {
     _removed = true;
     setState(() {
-      addedMembers.removeWhere((user) => user == toBeRemovedUser);
+      addedMembers.removeWhere((user) => user == toBeRemovedUser.getEmail());
     });
     setState(() {});
   }
 
-  Padding buildAddedMemberList(List<BcUser> addedMembers) {
+  Future<Padding> buildAddedMemberList(List<String> addedMembersEmail) async {
+    List<BcUser> addedMembers = [];
+    for (int i = 0; i < addedMembersEmail.length; i++) {
+      await userfromEmail(addedMembersEmail[i]).then((value) {
+        addedMembers.add(value!);
+      });
+    }
     _removed = false;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -274,8 +323,9 @@ class _AddMembersState extends State<AddMembers> {
     );
   }
 
-  Padding _addedMemberList(BcUser toBeAddedUser, List<BcUser> addedMembers) {
+  Future<Padding> _addedMemberList(
+      BcUser toBeAddedUser, List<String> addedMembersEmail) async {
     _addMember(toBeAddedUser);
-    return buildAddedMemberList(addedMembers);
+    return await buildAddedMemberList(addedMembersEmail);
   }
 }

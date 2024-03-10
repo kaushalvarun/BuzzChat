@@ -1,6 +1,5 @@
 import 'package:buzz_chat/pages/chat/format_timestamp.dart';
 import 'package:buzz_chat/pages/group_chats/group_chat_screen.dart';
-import 'package:buzz_chat/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +7,7 @@ class GroupTile extends StatefulWidget {
   final String creatorOfGroup;
   final String groupName;
   final String groupChatroomId;
-  final List<BcUser> groupMembers;
+  final List<String> groupMembers;
 
   const GroupTile({
     super.key,
@@ -47,7 +46,7 @@ class _GroupTileState extends State<GroupTile> {
             );
           }
           // no messages yet case
-          if (!snapshot.hasData) {
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return Column(
               children: [
                 ListTile(
@@ -109,6 +108,7 @@ class _GroupTileState extends State<GroupTile> {
           final latestMsgData = messages[messages.length - 1].data();
           final Timestamp latestMsgTimestamp =
               latestMsgData['timestamp'] as Timestamp;
+
           return Column(
             children: [
               ListTile(
@@ -161,8 +161,7 @@ class _GroupTileState extends State<GroupTile> {
                   ),
                 ),
                 dense: true,
-                visualDensity:
-                    const VisualDensity(vertical: 2.5), // Adjust as needed
+                visualDensity: const VisualDensity(vertical: 2.5),
               ),
               const Divider(
                 indent: 105,
