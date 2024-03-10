@@ -97,8 +97,9 @@ class _GroupInfoState extends State<GroupInfo> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                // Pop until to go to home screen
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.of(context).pop();
+                Navigator.of(context)
+                    .pop(); // Pop twice to go back to display groups screen
               },
               child: const Text("OK"),
             ),
