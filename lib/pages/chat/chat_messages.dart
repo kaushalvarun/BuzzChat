@@ -98,8 +98,8 @@ class _ChatMessagesState extends State<ChatMessages> {
 
             itemBuilder: (context, index) {
               // getting current message data
-              final messageData = prevMessages[index].data()!
-                  as Map<String, dynamic>; // Cast to Map
+              final messageData =
+                  prevMessages[index].data()! as Map<String, dynamic>;
 
               bool isCurrentUser =
                   messageData['senderID'] == _fireauth.currentUser!.uid;
